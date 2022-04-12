@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  pg:
+    image: 'postgres:14-alpine'
+    container_name: 'reddit-clone-database'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: reddit-clone
+      NODE_ENV: dev
+    ports:
+      - '5433:5432'
