@@ -1,7 +1,8 @@
 import express from 'express';
 import { createPool } from 'slonik';
 import { config } from 'dotenv';
-import { DatabaseService } from './services/database.service';
+import jwt from 'jsonwebtoken';
+import { DatabaseService, User } from './services/database.service';
 
 config();
 
@@ -25,17 +26,29 @@ app.post('/register', async (req, res) => {
   if (!userExists) {
     const writeUser = await databaseService.writeUser({ email, username, password });
     console.log(req.body);
-    res.json({ writeUser, status: 'Registration successful!' });
+    res.status(200).json({ writeUser, status: 'Registration successful!' });
   }
-  res.json('Username or email already exists');
+  res.status(200).json('Username or email already exists');
 });
 
-// TODO
-// post route for login
-// it checks that credentials are valid
-// if they aren't valid, return an error
-// if they are valid, generate a JWT and send it back to the user
-// log them in
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  const isValidUser = await databaseService.verifyUser(username, password);
+
+  if (isValidUser) {
+    const getUserForJwt = (username: string): Promise<User | null> => {
+      return databaseService.getUser(username);
+    };
+
+    const userJwtPayload = await getUserForJwt(username);
+
+    const userJwt = jwt.sign({ userJwtPayload }, 'test', { expiresIn: '10h' });
+
+    res.status(200).json({ userJwt, status: 'Jwt generated!' });
+  }
+  res.json('Incorrect user credentials!');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -6,6 +6,11 @@ export interface DatabaseUser {
   password: string;
 }
 
+export interface User {
+  username: string;
+  password: string;
+}
+
 export class DatabaseService {
   pool: DatabasePool;
 
@@ -27,6 +32,22 @@ export class DatabaseService {
     return this.pool.connect((connection) => {
       return connection.query<DatabaseUser>(
         sql`INSERT INTO users (email, username, password_hash) VALUES (${email}, ${username}, ${password})`
+      );
+    });
+  }
+
+  async verifyUser(username: string, password: string): Promise<Boolean> {
+    return this.pool.connect((connection) => {
+      return connection.exists(
+        sql`SELECT * FROM users WHERE username = ${username} AND password_hash = ${password}`
+      );
+    });
+  }
+
+  async getUser(username: string): Promise<DatabaseUser | null> {
+    return this.pool.connect((connection) => {
+      return connection.maybeOne<DatabaseUser>(
+        sql`SELECT id, username FROM users WHERE username = ${username}`
       );
     });
   }
