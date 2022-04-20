@@ -1,9 +1,14 @@
+import { User } from '../../common/types';
 import { DatabaseService } from './database.service';
 
 export class UserService {
-  DatabaseService: DatabaseService;
+  databaseService: DatabaseService;
 
   constructor(databaseService: DatabaseService) {
-    this.DatabaseService = databaseService;
+    this.databaseService = databaseService;
   }
+
+  getUserForJwt = (username: string): Promise<User | null> => {
+    return this.databaseService.getPartialUser(username);
+  };
 }

@@ -1,12 +1,8 @@
 import { DatabasePool, QueryResult, sql } from 'slonik';
+import { User } from '../../common/types';
 
 export interface DatabaseUser {
   email: string;
-  username: string;
-  password: string;
-}
-
-export interface User {
   username: string;
   password: string;
 }
@@ -47,6 +43,14 @@ export class DatabaseService {
   async getUser(username: string): Promise<DatabaseUser | null> {
     return this.pool.connect((connection) => {
       return connection.maybeOne<DatabaseUser>(
+        sql`SELECT * FROM users WHERE username = ${username}`
+      );
+    });
+  }
+
+  async getPartialUser(username: string): Promise<User | null> {
+    return this.pool.connect((connection) => {
+      return connection.maybeOne<User>(
         sql`SELECT id, username FROM users WHERE username = ${username}`
       );
     });
