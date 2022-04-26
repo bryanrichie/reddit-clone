@@ -1,4 +1,5 @@
 import { DatabasePool, QueryResult, sql } from 'slonik';
+import { User } from '../../common/types';
 
 export interface DatabaseUser {
   email: string;
@@ -27,6 +28,30 @@ export class DatabaseService {
     return this.pool.connect((connection) => {
       return connection.query<DatabaseUser>(
         sql`INSERT INTO users (email, username, password_hash) VALUES (${email}, ${username}, ${password})`
+      );
+    });
+  }
+
+  async validUser(username: string, password: string): Promise<Boolean> {
+    return this.pool.connect((connection) => {
+      return connection.exists(
+        sql`SELECT * FROM users WHERE username = ${username} AND password_hash = ${password}`
+      );
+    });
+  }
+
+  async getUser(username: string): Promise<DatabaseUser | null> {
+    return this.pool.connect((connection) => {
+      return connection.maybeOne<DatabaseUser>(
+        sql`SELECT * FROM users WHERE username = ${username}`
+      );
+    });
+  }
+
+  async getPartialUser(username: string): Promise<User | null> {
+    return this.pool.connect((connection) => {
+      return connection.maybeOne<User>(
+        sql`SELECT id, username FROM users WHERE username = ${username}`
       );
     });
   }
