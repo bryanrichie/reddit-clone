@@ -1,4 +1,3 @@
-import { QueryResult } from 'slonik';
 import { User } from '../../common/types';
 import { DatabaseService, DatabaseUser } from './database.service';
 
@@ -9,11 +8,16 @@ export class UserService {
     this.databaseService = databaseService;
   }
 
-  registerUser = (user: DatabaseUser): Promise<QueryResult<DatabaseUser>> => {
-    return this.databaseService.writeUser(user);
-  };
+  async registerUser(email: string, username: string, password: string): Promise<void> {
+    const userExists = await this.databaseService.userExists(email, username);
 
-  getUserForJwt = (username: string): Promise<User | null> => {
+    if (userExists) {
+      throw new Error('User already exists.');
+    }
+    await this.databaseService.writeUser({ email, username, password });
+  }
+
+  getUserForJwt(username: string): Promise<User | null> {
     return this.databaseService.getPartialUser(username);
-  };
+  }
 }

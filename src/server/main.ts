@@ -21,31 +21,31 @@ app.get('/', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-  const { email, username, password } = req.body;
+  try {
+    const { email, username, password } = req.body;
 
-  const userExists = await databaseService.userExists(email, username);
+    await userService.registerUser(email, username, password);
 
-  if (!userExists) {
-    const registerUser = await userService.registerUser({ email, username, password });
+    const user = await userService.getUserForJwt(username);
 
-    res.status(200).json({ registerUser, status: 'Registration successful!' });
+    res.status(200).json({ user, status: 'Registration successful!' });
+  } catch (err) {
+    res.status(400).json({ err: `User already exists.` });
   }
-  res.json('Username or email already exists');
 });
 
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { username } = req.body;
 
-  const validUser = await databaseService.validUser(username, password);
+  const userJwtPayload = await userService.getUserForJwt(username);
 
-  if (validUser) {
-    const userJwtPayload = await userService.getUserForJwt(username);
-
-    const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
-
-    res.status(200).json({ userJwt, status: 'Jwt generated!' });
+  if (!userJwtPayload) {
+    res.status(401).json('Incorrect user credentials!');
   }
-  res.status(401).json('Incorrect user credentials!');
+
+  const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
+
+  res.status(200).json({ userJwt, status: 'Jwt generated!' });
 });
 
 app.listen(port, () => {
