@@ -26,9 +26,9 @@ app.post('/register', async (req, res) => {
   const userExists = await databaseService.userExists(email, username);
 
   if (!userExists) {
-    const writeUser = await databaseService.writeUser({ email, username, password });
-    console.log(req.body);
-    res.status(200).json({ writeUser, status: 'Registration successful!' });
+    const registerUser = await userService.registerUser({ email, username, password });
+
+    res.status(200).json({ registerUser, status: 'Registration successful!' });
   }
   res.json('Username or email already exists');
 });
@@ -36,9 +36,9 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  const isValidUser = await databaseService.verifyUser(username, password);
+  const validUser = await databaseService.validUser(username, password);
 
-  if (isValidUser) {
+  if (validUser) {
     const userJwtPayload = await userService.getUserForJwt(username);
 
     const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });

@@ -32,7 +32,7 @@ export class DatabaseService {
     });
   }
 
-  async verifyUser(username: string, password: string): Promise<Boolean> {
+  async validUser(username: string, password: string): Promise<Boolean> {
     return this.pool.connect((connection) => {
       return connection.exists(
         sql`SELECT * FROM users WHERE username = ${username} AND password_hash = ${password}`
