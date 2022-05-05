@@ -1,4 +1,4 @@
-import { CustomError, CustomErrors } from '../custom-error.model';
+import { CustomError, CustomErrors } from '../customError';
 import { DatabaseService } from './database.service';
 
 export class UserService {
@@ -30,5 +30,9 @@ export class UserService {
       });
     }
     return this.databaseService.getPartialUser(username);
+  }
+
+  updateUser(userId: string, email: string, username: string, password: string) {
+    return this.databaseService.updateUser(userId, { email, username, password });
   }
 }

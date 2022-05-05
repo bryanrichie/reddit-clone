@@ -6,7 +6,7 @@ import { UserService } from './services/user.service';
 import { PostService } from './services/post.service';
 import { Config, fromEnv } from './config';
 import { errorMiddleware } from './middleware/error.middleware';
-import { CustomError } from './custom-error.model';
+import { CustomError } from './customError';
 
 const config: Config = fromEnv();
 
@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/register', async (req, res, next) => {
+app.post('/user/register', async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
 
@@ -36,7 +36,7 @@ app.post('/register', async (req, res, next) => {
   }
 });
 
-app.post('/login', async (req, res, next) => {
+app.post('/user/login', async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -45,6 +45,18 @@ app.post('/login', async (req, res, next) => {
     const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
 
     res.status(200).json({ userJwt, status: 'Authentication successful, logging in.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/user/update', async (req, res, next) => {
+  try {
+    const { userId, email, username, password } = req.body;
+
+    const updatedUser = await userService.updateUser(userId, email, username, password);
+
+    res.status(200).json({ updatedUser, status: 'User successfully updated.' });
   } catch (error) {
     next(error);
   }
@@ -81,6 +93,18 @@ app.post('/post/edit', async (req, res, next) => {
     const editedPost = await postService.editPost(postId, userId, title, body, image);
 
     res.status(200).json({ editedPost, status: 'Post successfully edited.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/post/:postId', async (req, res, next) => {
+  try {
+    const { postId } = req.body;
+
+    const post = await postService.servePost(postId);
+
+    res.status(200).json({ post });
   } catch (error) {
     next(error);
   }

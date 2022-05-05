@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomError, CustomErrors, errorTypeToStatusCode } from '../custom-error.model';
+import { CustomError, CustomErrors, errorTypeToStatusCode } from '../customError';
 
 export const isCustomError = (error: Error | CustomError) => error instanceof CustomError;
 
