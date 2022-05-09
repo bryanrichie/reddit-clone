@@ -8,9 +8,7 @@ export enum CustomErrors {
 interface ErrorType {
   type: CustomErrors;
   message: string;
-  metadata?: {
-    fields: Record<string, unknown>;
-  };
+  metadata?: Record<string, unknown>;
 }
 
 export class CustomError extends Error {
