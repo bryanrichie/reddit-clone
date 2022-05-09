@@ -1,5 +1,6 @@
+import { User } from '../../common/types';
 import { CustomError, CustomErrors } from '../customError';
-import { DatabaseService } from './database.service';
+import { DatabaseService, DatabaseUser } from './database.service';
 
 export class UserService {
   databaseService: DatabaseService;
@@ -8,7 +9,7 @@ export class UserService {
     this.databaseService = databaseService;
   }
 
-  async registerUser(email: string, username: string, password: string) {
+  async registerUser(email: string, username: string, password: string): Promise<DatabaseUser> {
     const userExists = await this.databaseService.userExists(email, username);
 
     if (userExists) {
@@ -20,7 +21,7 @@ export class UserService {
     return this.databaseService.writeUser({ email, username, password });
   }
 
-  async getUserForJwt(username: string, password: string) {
+  async getUserForJwt(username: string, password: string): Promise<User | null> {
     const validUser = await this.databaseService.validUser(username, password);
 
     if (!validUser) {
@@ -32,7 +33,12 @@ export class UserService {
     return this.databaseService.getPartialUser(username);
   }
 
-  updateUser(userId: string, email: string, username: string, password: string) {
+  updateUser(
+    userId: string,
+    email: string,
+    username: string,
+    password: string
+  ): Promise<DatabaseUser> {
     return this.databaseService.updateUser(userId, { email, username, password });
   }
 }
