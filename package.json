@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "vite",
+    "client:dev": "vite",
     "client:build": "tsc && vite build",
     "server:dev": "ts-node-dev --respawn --transpile-only src/server/main.ts",
     "dev": "docker-compose up -d && run-p server:dev client:dev",
