@@ -1,1 +1,1 @@
-web: node main.tsx
+web: npm run client:dev
