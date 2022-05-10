@@ -3,13 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "start": "node dist/src/server/main.ts",
     "client:dev": "vite",
-    "client:build": "tsc && vite build",
+    "client:build": "vite build",
     "server:dev": "ts-node-dev --respawn --transpile-only src/server/main.ts",
+    "server:build": "tsc",
+    "build": "run-s clean server:build client:build",
     "dev": "docker-compose up -d && run-p server:dev client:dev",
     "db:cli": "pgcli postgresql://postgres:pass@localhost:5433/reddit-clone",
     "db:restart": "docker-compose rm pg && docker-compose up",
-    "heroku:build": "npm run client:build"
+    "heroku:build": "npm run server:build"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.8",
