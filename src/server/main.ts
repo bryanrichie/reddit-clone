@@ -11,7 +11,7 @@ import { CustomError } from './customError';
 const config: Config = fromEnv();
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const pool = createPool(process.env.DATABASE_URL ?? '');
 const databaseService = new DatabaseService(pool);
