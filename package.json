@@ -8,7 +8,8 @@
     "server:dev": "ts-node-dev --respawn --transpile-only src/server/main.ts",
     "dev": "docker-compose up -d && run-p server:dev client:dev",
     "db:cli": "pgcli postgresql://postgres:pass@localhost:5433/reddit-clone",
-    "db:restart": "docker-compose rm pg && docker-compose up"
+    "db:restart": "docker-compose rm pg && docker-compose up",
+    "heroku:build": "npm run client:build"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.8",
