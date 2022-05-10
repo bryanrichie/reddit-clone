@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "node dist/src/server/main.ts",
+    "clean": "rimraf -rf ./dist",
+    "start": "node dist/src/server/main.js",
     "client:dev": "vite",
     "client:build": "vite build",
     "server:dev": "ts-node-dev --respawn --transpile-only src/server/main.ts",
@@ -11,8 +12,7 @@
     "build": "run-s clean server:build client:build",
     "dev": "docker-compose up -d && run-p server:dev client:dev",
     "db:cli": "pgcli postgresql://postgres:pass@localhost:5433/reddit-clone",
-    "db:restart": "docker-compose rm pg && docker-compose up",
-    "heroku:build": "npm run build"
+    "db:restart": "docker-compose rm pg && docker-compose up"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.8",
@@ -34,6 +34,8 @@
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.4",
     "vite": "^2.9.0"
