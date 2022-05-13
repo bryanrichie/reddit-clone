@@ -1,10 +1,11 @@
-import React from 'react';
-import { Flex, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { Input, Text, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'react-use';
 import * as yup from 'yup';
 import { useRegisterUser } from '../hooks/useRegisterUser';
-import { useNavigate } from 'react-router-dom';
 
 interface FormValues {
   email: string;
@@ -28,7 +29,8 @@ const validationSchema = yup
   })
   .required();
 
-export const Register = () => {
+export const RegisterForm = () => {
+  const [token, setToken] = useLocalStorage<string | undefined>('auth');
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   const {
@@ -42,27 +44,34 @@ export const Register = () => {
 
   const onSubmit = (data: FormValues) => {
     registerUserMutation.mutateAsync(data).then((res) => {
-      console.log(res);
-      navigate('/login', { replace: true });
+      setToken(res);
+      navigate('/', { replace: true });
     });
   };
 
   return (
-    <Flex justifyContent="center">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input {...register('email')} id="email" type="email" placeholder="Email" />
-          <Text>{errors.email?.message}</Text>
-          <FormLabel htmlFor="username">Username</FormLabel>
-          <Input {...register('username')} id="username" type="username" placeholder="Username" />
-          <Text>{errors.username?.message}</Text>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input {...register('password')} id="password" type="password" placeholder="Password" />
-          <Text>{errors.password?.message}</Text>
-          <Input type="submit" />
-        </VStack>
-      </form>
-    </Flex>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <VStack>
+        <Input {...register('email')} id="email" type="email" placeholder="Email" bg="white" />
+        <Text>{errors.email?.message}</Text>
+        <Input
+          {...register('username')}
+          id="username"
+          type="username"
+          placeholder="Username"
+          bg="white"
+        />
+        <Text>{errors.username?.message}</Text>
+        <Input
+          {...register('password')}
+          id="password"
+          type="password"
+          placeholder="Password"
+          bg="white"
+        />
+        <Text>{errors.password?.message}</Text>
+        <Input type="submit" value="Register" bg="gray.400" color="white" />
+      </VStack>
+    </form>
   );
 };

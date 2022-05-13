@@ -7,11 +7,13 @@ interface UserVariables {
   password: string;
 }
 
-const postUser = async (variables: UserVariables): Promise<void> => {
+type jwt = string;
+
+const postRegisterUser = async (variables: UserVariables): Promise<jwt> => {
   const { data } = await axios.post('http://localhost:8080/register', variables);
   return data;
 };
 
 export const useRegisterUser = () => {
-  return useMutation<void, Error, UserVariables>(postUser);
+  return useMutation<jwt, Error, UserVariables>(postRegisterUser);
 };

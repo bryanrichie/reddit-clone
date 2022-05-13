@@ -31,7 +31,11 @@ app.post('/register', async (req, res, next) => {
 
     await userService.registerUser(email, username, password);
 
-    res.status(200).json({ status: 'Registration successful.' });
+    const userJwtPayload = await userService.getUserForJwt(username, password);
+
+    const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
+
+    res.status(200).json(userJwt);
   } catch (error) {
     next(error);
   }
@@ -45,7 +49,7 @@ app.post('/login', async (req, res, next) => {
 
     const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
 
-    res.status(200).json({ userJwt, status: 'Authentication successful, logging in.' });
+    res.status(200).json(userJwt);
   } catch (error) {
     next(error);
   }
