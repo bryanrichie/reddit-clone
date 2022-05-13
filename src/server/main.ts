@@ -6,37 +6,38 @@ import { UserService } from './services/user.service';
 import { PostService } from './services/post.service';
 import { Config, fromEnv } from './config';
 import { errorMiddleware } from './middleware/error.middleware';
-import { CustomError } from './customError';
+import cors from 'cors';
 
 const config: Config = fromEnv();
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8080;
 
 const pool = createPool(process.env.DATABASE_URL ?? '');
 const databaseService = new DatabaseService(pool);
 const userService = new UserService(databaseService);
 const postService = new PostService(databaseService);
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Reddit clone server');
 });
 
-app.post('/user/register', async (req, res, next) => {
+app.post('/register', async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
 
-    const user = await userService.registerUser(email, username, password);
+    await userService.registerUser(email, username, password);
 
-    res.status(200).json({ user, status: 'Registration successful.' });
+    res.status(200).json({ status: 'Registration successful.' });
   } catch (error) {
     next(error);
   }
 });
 
-app.post('/user/login', async (req, res, next) => {
+app.post('/login', async (req, res, next) => {
   try {
     const { username, password } = req.body;
 

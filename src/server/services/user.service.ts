@@ -9,16 +9,22 @@ export class UserService {
     this.databaseService = databaseService;
   }
 
-  async registerUser(email: string, username: string, password: string): Promise<DatabaseUser> {
+  async registerUser(email: string, username: string, password: string): Promise<void> {
     const userExists = await this.databaseService.userExists(email, username);
 
     if (userExists) {
       throw new CustomError({
         type: CustomErrors.UserAlreadyExists,
         message: `User already exists`,
+        metadata: {
+          fields: {
+            email: 'Email already exists',
+            username: 'Username already exists',
+          },
+        },
       });
     }
-    return this.databaseService.writeUser({ email, username, password });
+    await this.databaseService.writeUser({ email, username, password });
   }
 
   async getUserForJwt(username: string, password: string): Promise<User | null> {
