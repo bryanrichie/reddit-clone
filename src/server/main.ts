@@ -25,6 +25,15 @@ app.get('/', (req, res) => {
   res.send('Reddit clone server');
 });
 
+app.get('/protected', async (req, res, next) => {
+  try {
+    const users = await userService.getUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post('/register', async (req, res, next) => {
   try {
     const { email, username, password } = req.body;

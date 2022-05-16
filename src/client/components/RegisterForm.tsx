@@ -3,9 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useLocalStorage } from 'react-use';
 import * as yup from 'yup';
-import { useRegisterUser } from '../hooks/useRegisterUser';
+import { useAuthContext } from '../context/authContext';
 
 interface FormValues {
   email: string;
@@ -30,7 +29,6 @@ const validationSchema = yup
   .required();
 
 export const RegisterForm = () => {
-  const [token, setToken] = useLocalStorage<string | undefined>('auth');
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   const {
@@ -39,15 +37,17 @@ export const RegisterForm = () => {
     formState: { errors },
   } = useForm<FormValues>(formOptions);
 
-  const registerUserMutation = useRegisterUser();
   const navigate = useNavigate();
+  const { register: registerUser } = useAuthContext();
 
-  const onSubmit = (data: FormValues) => {
-    registerUserMutation.mutateAsync(data).then((res) => {
-      setToken(res);
-      navigate('/', { replace: true });
-    });
-  };
+  const onSubmit = React.useCallback(
+    (data: FormValues) => {
+      registerUser.registerAsync(data).then(() => {
+        navigate('/', { replace: true });
+      });
+    },
+    [registerUser]
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
