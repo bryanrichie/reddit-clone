@@ -1,10 +1,12 @@
 import React from 'react';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, VStack } from '@chakra-ui/react';
 
 export function App() {
   return (
     <Flex>
-      <Text>Hello World</Text>
+      <VStack>
+        <Text>Home</Text>
+      </VStack>
     </Flex>
   );
 }
