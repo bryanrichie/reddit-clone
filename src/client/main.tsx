@@ -4,7 +4,10 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { App } from './App';
+import { AuthContextProvider, useAuthContext } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
+import { ProtectedPage } from './pages/ProtectedPage';
 
 const queryClient = new QueryClient();
 
@@ -12,12 +15,29 @@ ReactDOM.render(
   <ChakraProvider>
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/login" element={<LoginPage />} />
-          </Routes>
-        </BrowserRouter>
+        <AuthContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <App />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/protected"
+                element={
+                  <ProtectedRoute>
+                    <ProtectedPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/login" element={<LoginPage />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthContextProvider>
       </QueryClientProvider>
     </React.StrictMode>
   </ChakraProvider>,

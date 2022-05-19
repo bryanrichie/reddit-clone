@@ -19,7 +19,9 @@ export const useAuth = () => {
 
   const registerAsync = React.useCallback(
     (request: Request) => {
+      console.log(request, 'request');
       return registerUserMutation.mutateAsync(request).then((res) => {
+        console.log(res, 'res')
         setToken(res);
       });
     },

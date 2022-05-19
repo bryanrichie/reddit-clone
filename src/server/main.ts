@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request } from 'express';
 import { createPool } from 'slonik';
 import jwt from 'jsonwebtoken';
 import { DatabaseService } from './services/database.service';
@@ -7,6 +7,8 @@ import { PostService } from './services/post.service';
 import { Config, fromEnv } from './config';
 import { errorMiddleware } from './middleware/error.middleware';
 import cors from 'cors';
+import { authMiddleware } from './middleware/auth.middleware';
+import { CustomError, CustomErrors } from './customError';
 
 const config: Config = fromEnv();
 
@@ -25,9 +27,10 @@ app.get('/', (req, res) => {
   res.send('Reddit clone server');
 });
 
-app.get('/protected', async (req, res, next) => {
+app.get('/protected', authMiddleware, async (req: Request, res, next) => {
   try {
     const users = await userService.getUsers();
+
     res.status(200).json(users);
   } catch (error) {
     next(error);
@@ -42,7 +45,14 @@ app.post('/register', async (req, res, next) => {
 
     const userJwtPayload = await userService.getUserForJwt(username, password);
 
-    const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
+    if (!userJwtPayload) {
+      throw new CustomError({
+        type: CustomErrors.InternalServerError,
+        message: 'Internal server error',
+      });
+    }
+
+    const userJwt = jwt.sign(userJwtPayload, config.jwtSecret, { expiresIn: '10h' });
 
     res.status(200).json(userJwt);
   } catch (error) {
@@ -56,7 +66,14 @@ app.post('/login', async (req, res, next) => {
 
     const userJwtPayload = await userService.getUserForJwt(username, password);
 
-    const userJwt = jwt.sign({ userJwtPayload }, config.jwtSecret, { expiresIn: '10h' });
+    if (!userJwtPayload) {
+      throw new CustomError({
+        type: CustomErrors.InternalServerError,
+        message: 'Internal server error',
+      });
+    }
+
+    const userJwt = jwt.sign(userJwtPayload, config.jwtSecret, { expiresIn: '10h' });
 
     res.status(200).json(userJwt);
   } catch (error) {
@@ -76,11 +93,11 @@ app.post('/user/update', async (req, res, next) => {
   }
 });
 
-app.post('/post/create', async (req, res, next) => {
+app.post('/post/create', authMiddleware, async (req, res, next) => {
   try {
-    const { userId, title, body, image } = req.body;
+    const { title, body, image } = req.body;
 
-    const post = await postService.createPost(userId, title, body, image);
+    const post = await postService.createPost(req.user.id, title, body, image);
 
     res.status(200).json({ post, status: 'Successfully posted.' });
   } catch (error) {
