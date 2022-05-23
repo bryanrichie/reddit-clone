@@ -17,6 +17,6 @@
     "incremental": true,
     "outDir": "./dist"
   },
-  "include": ["./src", "vite.config.ts", "tsconfig.node.json"],
+  "include": ["./src", "vite.config.ts", "tsconfig.node.json", "index.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

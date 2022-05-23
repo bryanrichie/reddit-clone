@@ -88,6 +88,13 @@ export class DatabaseService {
     });
   }
 
+  async getUsers(): Promise<readonly User[]> {
+    return this.pool.connect(async (connection) => {
+      const { rows } = await connection.query<User>(sql`SELECT id, username FROM users;`);
+      return rows;
+    });
+  }
+
   async writePost(userPost: DatabasePost): Promise<DatabasePost> {
     const { userId, title, body, image } = userPost;
 

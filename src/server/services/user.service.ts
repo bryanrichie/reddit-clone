@@ -47,4 +47,8 @@ export class UserService {
   ): Promise<DatabaseUser> {
     return this.databaseService.updateUser(userId, { email, username, password });
   }
+
+  getUsers(): Promise<readonly User[]> {
+    return this.databaseService.getUsers();
+  }
 }

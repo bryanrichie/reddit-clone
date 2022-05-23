@@ -1,11 +1,10 @@
-import React from 'react';
-import { Flex, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { Input, Text, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useLoginUser } from '../hooks/useLoginUser';
-import { useLocalStorage } from 'react-use';
+import * as yup from 'yup';
+import { useAuthContext } from '../context/AuthContext';
 
 interface FormValues {
   username: string;
@@ -21,7 +20,6 @@ const validationSchema = yup
   .required();
 
 export const LoginForm = () => {
-  const [token, setToken] = useLocalStorage<string | undefined>('auth');
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   const {
@@ -30,12 +28,11 @@ export const LoginForm = () => {
     formState: { errors },
   } = useForm<FormValues>(formOptions);
 
-  const loginUserMutation = useLoginUser();
   const navigate = useNavigate();
+  const { login } = useAuthContext();
 
   const onSubmit = (data: FormValues) => {
-    loginUserMutation.mutateAsync(data).then((res) => {
-      setToken(res);
+    login.loginAsync(data).then(() => {
       navigate('/', { replace: true });
     });
   };

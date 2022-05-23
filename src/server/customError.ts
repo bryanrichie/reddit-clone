@@ -1,8 +1,9 @@
 export enum CustomErrors {
-  UserAlreadyExists = 'UserAlreadyExists',
   UserNotFound = 'UserNotFound',
-  InternalServerError = 'InternalServerError',
+  Unauthorized = 'Unauthorized',
   InvalidLoginCredentials = 'InvalidLoginCredentials',
+  UserAlreadyExists = 'UserAlreadyExists',
+  InternalServerError = 'InternalServerError',
 }
 
 interface ErrorType {
@@ -28,6 +29,8 @@ export const errorTypeToStatusCode = (type: CustomErrors) => {
   switch (type) {
     case CustomErrors.UserNotFound:
       return 400;
+    case CustomErrors.Unauthorized:
+      return 401;
     case CustomErrors.InvalidLoginCredentials:
       return 403;
     case CustomErrors.UserAlreadyExists:
