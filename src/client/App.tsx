@@ -1,13 +1,30 @@
 import React from 'react';
-import { Flex, Text, VStack } from '@chakra-ui/react';
-import { useAuth } from './hooks/useAuth';
+import { Route, Routes } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { HomePage } from './pages/HomePage';
+import { LoginPage } from './pages/LoginPage';
+import { ProtectedPage } from './pages/ProtectedPage';
 
 export function App() {
   return (
-    <Flex>
-      <VStack>
-        <Text>Home</Text>
-      </VStack>
-    </Flex>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/protected"
+        element={
+          <ProtectedRoute>
+            <ProtectedPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/login" element={<LoginPage />} />
+    </Routes>
   );
 }
