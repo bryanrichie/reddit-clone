@@ -1,22 +1,19 @@
-import React from 'react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
-  Heading,
   HStack,
   IconButton,
   Menu,
   MenuButton,
   MenuDivider,
-  MenuGroup,
   MenuItem,
   MenuList,
-  Switch,
   Text,
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import React from 'react';
 import { MdAccountCircle, MdLogout, MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
 
 export const NavBar = () => {
