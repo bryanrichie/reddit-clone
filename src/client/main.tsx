@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { App } from './App';
 import { AuthContextProvider, useAuthContext } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { NavBar } from './components/NavBar';
 import { LoginPage } from './pages/LoginPage';
 import { ProtectedPage } from './pages/ProtectedPage';
 
@@ -13,6 +14,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
   <ChakraProvider>
+    <ColorModeScript initialColorMode="system" />
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
