@@ -93,13 +93,18 @@ app.post('/user/update', async (req, res, next) => {
   }
 });
 
-app.post('/post/create', authMiddleware, async (req, res, next) => {
+app.post('/post/create', authMiddleware, async (req: Request, res, next) => {
   try {
-    const { title, body, image } = req.body;
+    const { title, text, url } = req.body;
 
-    const post = await postService.createPost(req.user.id, title, body, image);
+    const post = await postService.createPost({
+      userId: req.user.id,
+      title,
+      text: text ?? null,
+      url: url ?? null,
+    });
 
-    res.status(200).json({ post, status: 'Successfully posted.' });
+    res.status(200).json(post);
   } catch (error) {
     next(error);
   }
@@ -119,9 +124,9 @@ app.post('/post/delete', async (req, res, next) => {
 
 app.post('/post/edit', async (req, res, next) => {
   try {
-    const { postId, userId, title, body, image } = req.body;
+    const { postId, title, text, url } = req.body;
 
-    const editedPost = await postService.editPost(postId, userId, title, body, image);
+    const editedPost = await postService.editPost(postId, { title, text, url });
 
     res.status(200).json({ editedPost, status: 'Post successfully edited.' });
   } catch (error) {

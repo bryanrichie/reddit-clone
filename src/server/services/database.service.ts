@@ -1,5 +1,6 @@
 import { ConnectionError, createMockQueryResult, DatabasePool, QueryResult, sql } from 'slonik';
 import { User } from '../../common/types';
+import { patch } from './utils';
 
 export interface DatabaseUser {
   email: string;
@@ -8,10 +9,26 @@ export interface DatabaseUser {
 }
 
 export interface DatabasePost {
+  id: string;
   userId: string;
   title: string;
-  body: string;
-  image: string;
+  text: string | null;
+  url: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateDatabasePostDto {
+  userId: string;
+  title: string;
+  text: string | null;
+  url: string | null;
+}
+
+export interface UpdateDatabasePostDto {
+  title?: string | null;
+  text?: string | null;
+  url?: string | null;
 }
 
 export class DatabaseService {
@@ -95,39 +112,42 @@ export class DatabaseService {
     });
   }
 
-  async writePost(userPost: DatabasePost): Promise<DatabasePost> {
-    const { userId, title, body, image } = userPost;
+  async createPost(userPost: CreateDatabasePostDto): Promise<DatabasePost> {
+    const { userId, title, text, url } = userPost;
 
     const queryResult = await this.pool.connect(async (connection) => {
       return connection.one<DatabasePost>(
-        sql`INSERT INTO posts (user_id, title, body, image) 
-            VALUES (${userId}, ${title}, ${body}, ${image}) 
-            RETURNING title, body, image`
+        sql`INSERT INTO posts (user_id, title, text, url) 
+            VALUES (${userId}, ${title}, ${text}, ${url}) 
+            RETURNING *`
       );
     });
     return queryResult;
   }
 
-  async deletePost(postId: string, userId: string) {
-    const queryResult = await this.pool.connect((connection) => {
+  async deletePost(postId: string, userId: string): Promise<void> {
+    await this.pool.connect((connection) => {
       return connection.one(
         sql`DELETE FROM posts 
-            WHERE id = ${postId} AND user_id = ${userId} 
-            RETURNING title, body, image`
+            WHERE id = ${postId} AND user_id = ${userId}`
       );
     });
-    return queryResult;
   }
 
-  async editPost(postId: string, userPost: DatabasePost): Promise<DatabasePost> {
-    const { userId, title, body, image } = userPost;
+  async editPost(postId: string, userPost: UpdateDatabasePostDto): Promise<DatabasePost> {
+    const { title, text, url } = userPost;
 
     const queryResult = await this.pool.connect(async (connection) => {
+      const updateFragment = patch({
+        title,
+        text,
+        url,
+      });
+
       return connection.one<DatabasePost>(
-        sql`UPDATE posts 
-            SET title = ${title}, body = ${body}, image = ${image}, updated_at = now() 
-            WHERE id = ${postId} AND user_id = ${userId} 
-            RETURNING title, body, image;`
+        sql`UPDATE posts SET ${updateFragment}
+            WHERE "id" = ${postId} 
+            RETURNING *`
       );
     });
     return queryResult;

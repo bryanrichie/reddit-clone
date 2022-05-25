@@ -1,4 +1,9 @@
-import { DatabasePost, DatabaseService } from './database.service';
+import {
+  CreateDatabasePostDto,
+  DatabasePost,
+  DatabaseService,
+  UpdateDatabasePostDto,
+} from './database.service';
 
 export class PostService {
   databaseService: DatabaseService;
@@ -7,22 +12,16 @@ export class PostService {
     this.databaseService = databaseService;
   }
 
-  createPost(userId: string, title: string, body: string, image: string): Promise<DatabasePost> {
-    return this.databaseService.writePost({ userId, title, body, image });
+  createPost(post: CreateDatabasePostDto): Promise<DatabasePost> {
+    return this.databaseService.createPost(post);
   }
 
   deletePost(postId: string, userId: string) {
     return this.databaseService.deletePost(postId, userId);
   }
 
-  editPost(
-    postId: string,
-    userId: string,
-    title: string,
-    body: string,
-    image: string
-  ): Promise<DatabasePost> {
-    return this.databaseService.editPost(postId, { userId, title, body, image });
+  editPost(postId: string, post: UpdateDatabasePostDto): Promise<DatabasePost> {
+    return this.databaseService.editPost(postId, post);
   }
 
   servePost(postId: string): Promise<DatabasePost> {

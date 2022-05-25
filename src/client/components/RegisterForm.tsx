@@ -42,7 +42,6 @@ export const RegisterForm = () => {
 
   const onSubmit = React.useCallback(
     (data: FormValues) => {
-      console.log(data);
       registerUser
         .registerAsync(data)
         .then(() => {

@@ -28,8 +28,8 @@ CREATE TABLE "posts" (
   "id" uuid NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
   "user_id" uuid NOT NULL,
   "title" varchar(300) NOT NULL,
-  "body" varchar(40000),
-  "image" text,
+  "text" varchar(40000),
+  "url" text,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   PRIMARY KEY ("id"),
@@ -42,9 +42,9 @@ CREATE INDEX ON "posts" (user_id);
 
 CREATE INDEX ON "posts" (title);
 
-CREATE INDEX ON "posts" (body);
+CREATE INDEX ON "posts" (text);
 
-CREATE INDEX ON "posts" (image);
+CREATE INDEX ON "posts" (url);
 
 CREATE INDEX ON "posts" (created_at);
 

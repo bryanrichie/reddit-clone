@@ -12,12 +12,15 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
 import { MdAccountCircle, MdLogout, MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
+import { CreatePostModal } from './CreatePostModal';
 
 export const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const navBg = useColorModeValue('blue.100', 'blue.800');
   const navFont = useColorModeValue('blue.800', 'blue.100');
@@ -26,20 +29,13 @@ export const NavBar = () => {
   const navHoverBg = useColorModeValue('blue.800', 'blue.100');
 
   return (
-    <Flex w={'100%'} h={'100vh'} flexDir="column">
+    <Flex w={'100%'} h={'100vh'} flexDir="column" bg={bodyBg}>
       <HStack h={70} justifyContent={'space-between'} px="20px" bg={navBg}>
         <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navFont}>
           reddit clone
         </Text>
         <HStack>
-          <Button
-            bg={navFontBg}
-            color={navFont}
-            _hover={{ bg: navHoverBg, color: navHoverFont }}
-            _focus={{ boxShadow: '0' }}
-          >
-            Create post
-          </Button>
+          <CreatePostModal />
           <Menu>
             <MenuButton
               as={Button}
