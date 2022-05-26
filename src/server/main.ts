@@ -1,14 +1,14 @@
-import express, { Request } from 'express';
-import { createPool } from 'slonik';
-import jwt from 'jsonwebtoken';
-import { DatabaseService } from './services/database.service';
-import { UserService } from './services/user.service';
-import { PostService } from './services/post.service';
-import { Config, fromEnv } from './config';
-import { errorMiddleware } from './middleware/error.middleware';
 import cors from 'cors';
-import { authMiddleware } from './middleware/auth.middleware';
+import express, { Request } from 'express';
+import jwt from 'jsonwebtoken';
+import { createPool } from 'slonik';
+import { Config, fromEnv } from './config';
 import { CustomError, CustomErrors } from './customError';
+import { authMiddleware } from './middleware/auth.middleware';
+import { errorMiddleware } from './middleware/error.middleware';
+import { DatabaseService } from './services/database.service';
+import { PostService } from './services/post.service';
+import { UserService } from './services/user.service';
 
 const config: Config = fromEnv();
 
@@ -93,13 +93,18 @@ app.post('/user/update', async (req, res, next) => {
   }
 });
 
-app.post('/post/create', authMiddleware, async (req, res, next) => {
+app.post('/post/create', authMiddleware, async (req: Request, res, next) => {
   try {
-    const { title, body, image } = req.body;
+    const { title, text, url } = req.body;
 
-    const post = await postService.createPost(req.user.id, title, body, image);
+    const post = await postService.createPost({
+      userId: req.user.id,
+      title,
+      text: text ?? null,
+      url: url ?? null,
+    });
 
-    res.status(200).json({ post, status: 'Successfully posted.' });
+    res.status(200).json(post);
   } catch (error) {
     next(error);
   }
@@ -119,9 +124,9 @@ app.post('/post/delete', async (req, res, next) => {
 
 app.post('/post/edit', async (req, res, next) => {
   try {
-    const { postId, userId, title, body, image } = req.body;
+    const { postId, title, text, url } = req.body;
 
-    const editedPost = await postService.editPost(postId, userId, title, body, image);
+    const editedPost = await postService.editPost(postId, { title, text, url });
 
     res.status(200).json({ editedPost, status: 'Post successfully edited.' });
   } catch (error) {

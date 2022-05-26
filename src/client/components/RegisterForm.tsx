@@ -42,7 +42,6 @@ export const RegisterForm = () => {
 
   const onSubmit = React.useCallback(
     (data: FormValues) => {
-      console.log(data);
       registerUser
         .registerAsync(data)
         .then(() => {
@@ -65,6 +64,7 @@ export const RegisterForm = () => {
           id="username"
           type="username"
           placeholder="Username"
+          _placeholder={{ color: 'gray' }}
           bg="white"
         />
         <Text>{errors.username?.message}</Text>
@@ -73,10 +73,21 @@ export const RegisterForm = () => {
           id="password"
           type="password"
           placeholder="Password"
+          _placeholder={{ color: 'gray' }}
           bg="white"
         />
         <Text>{errors.password?.message}</Text>
-        <Input type="submit" value="Register" bg="gray.400" color="white" />
+        <Input
+          type="submit"
+          value="Register"
+          fontSize={'lg'}
+          bg="blue.700"
+          color="blue.100"
+          fontWeight="bold"
+          _hover={{ color: 'blue.700', bg: 'blue.100' }}
+          _focus={{ boxShadow: 0 }}
+          border={0}
+        />
       </VStack>
     </form>
   );
