@@ -45,6 +45,7 @@ export const LoginForm = () => {
           id="username"
           type="username"
           placeholder="Username"
+          _placeholder={{ color: 'gray' }}
           bg="white"
         />
         <Text>{errors.username?.message}</Text>
@@ -53,10 +54,21 @@ export const LoginForm = () => {
           id="password"
           type="password"
           placeholder="Password"
+          _placeholder={{ color: 'gray' }}
           bg="white"
         />
         <Text>{errors.password?.message}</Text>
-        <Input type="submit" value="Login" bg="gray.400" color="white" />
+        <Input
+          type="submit"
+          value="Login"
+          fontSize={'lg'}
+          bg="blue.700"
+          color="blue.100"
+          fontWeight="bold"
+          _hover={{ color: 'blue.700', bg: 'blue.100' }}
+          _focus={{ boxShadow: 0 }}
+          border={0}
+        />
       </VStack>
     </form>
   );

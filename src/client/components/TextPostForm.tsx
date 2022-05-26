@@ -1,4 +1,4 @@
-import { Input, Textarea, VStack } from '@chakra-ui/react';
+import { Input, Textarea, useColorModeValue, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import _ from 'lodash';
 import React from 'react';
@@ -26,6 +26,12 @@ export const TextPostForm = () => {
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
 
+  const submitFont = useColorModeValue('blue.800', 'blue.100');
+  const submitBg = useColorModeValue('white', 'gray.700');
+  const submitHoverFont = useColorModeValue('white', 'blue.700');
+  const submitHoverBg = useColorModeValue('blue.800', 'blue.100');
+  const inputBorder = useColorModeValue('blue.800', 'blue.100');
+
   const {
     register,
     handleSubmit,
@@ -49,24 +55,38 @@ export const TextPostForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack>
-        <Input {...register('title')} id="title" type="text" placeholder="Title" bg={'white'} />
+        <Input
+          {...register('title')}
+          id="title"
+          type="text"
+          placeholder="Title"
+          _placeholder={{ color: 'gray' }}
+          focusBorderColor={inputBorder}
+          bg={'white'}
+        />
         <Textarea
           {...register('text')}
           id="text"
           placeholder="Text (optional)"
+          _placeholder={{ color: 'gray' }}
+          focusBorderColor={inputBorder}
           bg={'white'}
           h={250}
         />
         <Input
           type="submit"
           value="Post"
-          bg="gray.400"
-          color="white"
           alignSelf={'flex-end'}
           w={100}
           mt={-5}
           mr={4}
           borderRadius={50}
+          color={submitFont}
+          bg={submitBg}
+          fontWeight="bold"
+          _hover={{ color: submitHoverFont, bg: submitHoverBg }}
+          _focus={{ boxShadow: 0 }}
+          border={0}
         />
       </VStack>
     </form>

@@ -1,4 +1,4 @@
-import { ConnectionError, createMockQueryResult, DatabasePool, QueryResult, sql } from 'slonik';
+import { DatabasePool, sql } from 'slonik';
 import { User } from '../../common/types';
 import { patch } from './utils';
 

@@ -1,14 +1,14 @@
-import express, { Request } from 'express';
-import { createPool } from 'slonik';
-import jwt from 'jsonwebtoken';
-import { DatabaseService } from './services/database.service';
-import { UserService } from './services/user.service';
-import { PostService } from './services/post.service';
-import { Config, fromEnv } from './config';
-import { errorMiddleware } from './middleware/error.middleware';
 import cors from 'cors';
-import { authMiddleware } from './middleware/auth.middleware';
+import express, { Request } from 'express';
+import jwt from 'jsonwebtoken';
+import { createPool } from 'slonik';
+import { Config, fromEnv } from './config';
 import { CustomError, CustomErrors } from './customError';
+import { authMiddleware } from './middleware/auth.middleware';
+import { errorMiddleware } from './middleware/error.middleware';
+import { DatabaseService } from './services/database.service';
+import { PostService } from './services/post.service';
+import { UserService } from './services/user.service';
 
 const config: Config = fromEnv();
 

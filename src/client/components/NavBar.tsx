@@ -12,7 +12,6 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
-  useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
 import { MdAccountCircle, MdLogout, MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
@@ -21,15 +20,14 @@ import { CreatePostModal } from './CreatePostModal';
 export const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const navBg = useColorModeValue('blue.100', 'blue.800');
   const navFont = useColorModeValue('blue.800', 'blue.100');
-  const navFontBg = useColorModeValue('white', 'gray.700');
+  const navButtonBg = useColorModeValue('white', 'gray.700');
   const navHoverFont = useColorModeValue('white', 'blue.700');
   const navHoverBg = useColorModeValue('blue.800', 'blue.100');
 
   return (
-    <Flex w={'100%'} h={'100vh'} flexDir="column" bg={bodyBg}>
+    <Flex w={'100%'} h={'100vh'} flexDir="column">
       <HStack h={70} justifyContent={'space-between'} px="20px" bg={navBg}>
         <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navFont}>
           reddit clone
@@ -39,7 +37,7 @@ export const NavBar = () => {
           <Menu>
             <MenuButton
               as={Button}
-              bg={navFontBg}
+              bg={navButtonBg}
               color={navFont}
               _hover={{ bg: navHoverBg, color: navHoverFont }}
               _active={{ bg: navHoverBg, color: navHoverFont }}
@@ -49,14 +47,14 @@ export const NavBar = () => {
             </MenuButton>
             <MenuList bg={navHoverBg} color={navHoverFont}>
               <MenuItem
-                _hover={{ bg: navFontBg, color: navFont }}
+                _hover={{ bg: navButtonBg, color: navFont }}
                 _focus={{ bg: navHoverBg }}
                 fontWeight="bold"
               >
                 <MdAccountCircle size={'25px'} /> <Text ml="10px">Profile</Text>
               </MenuItem>
               <MenuDivider />
-              <MenuItem _hover={{ bg: navFontBg, color: navFont }} fontWeight="bold">
+              <MenuItem _hover={{ bg: navButtonBg, color: navFont }} fontWeight="bold">
                 <MdLogout size={'25px'} />
                 <Text ml="10px">Logout</Text>
               </MenuItem>
@@ -64,9 +62,10 @@ export const NavBar = () => {
           </Menu>
           <IconButton
             aria-label="dark-mode"
-            bg={navFontBg}
+            bg={navButtonBg}
             color={navFont}
             _hover={{ bg: navHoverBg, color: navHoverFont }}
+            _active={{ bg: navHoverBg, color: navHoverFont }}
             _focus={{ boxShadow: '0' }}
             icon={
               colorMode === 'light' ? (
