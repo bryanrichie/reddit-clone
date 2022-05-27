@@ -27,7 +27,7 @@ export const NavBar = () => {
   const navHoverBg = useColorModeValue('blue.800', 'blue.100');
 
   return (
-    <Flex w={'100%'} h={'100vh'} flexDir="column">
+    <Flex w={'100%'} flexDir="column" mb={5}>
       <HStack h={70} justifyContent={'space-between'} px="20px" bg={navBg}>
         <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navFont}>
           reddit clone

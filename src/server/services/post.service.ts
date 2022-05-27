@@ -24,7 +24,11 @@ export class PostService {
     return this.databaseService.editPost(postId, post);
   }
 
-  servePost(postId: string): Promise<DatabasePost> {
-    return this.databaseService.servePost(postId);
+  getPosts(): Promise<readonly DatabasePost[]> {
+    return this.databaseService.getPosts();
+  }
+
+  getPost(postId: string): Promise<DatabasePost> {
+    return this.databaseService.getPost(postId);
   }
 }

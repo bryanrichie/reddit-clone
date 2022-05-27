@@ -40,17 +40,20 @@ export const TextPostForm = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: FormValues) => {
-    if (authToken) {
-      const request = {
-        title: data.title,
-        text: !_.isEmpty(data.text) ? data.text : null,
-      };
-      return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
-        navigate('/', { replace: true });
-      });
-    }
-  };
+  const onSubmit = React.useCallback(
+    (data: FormValues) => {
+      if (authToken) {
+        const request = {
+          title: data.title,
+          text: !_.isEmpty(data.text) ? data.text : null,
+        };
+        return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
+          navigate('/', { replace: true });
+        });
+      }
+    },
+    [createPostMutation]
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
