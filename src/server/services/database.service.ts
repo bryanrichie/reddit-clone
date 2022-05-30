@@ -153,7 +153,7 @@ export class DatabaseService {
     return queryResult;
   }
 
-  async servePost(postId: string): Promise<DatabasePost> {
+  async getPost(postId: string): Promise<DatabasePost> {
     const queryResult = await this.pool.connect(async (connection) => {
       return connection.one<DatabasePost>(
         sql`SELECT *
@@ -162,5 +162,13 @@ export class DatabaseService {
       );
     });
     return queryResult;
+  }
+
+  async getPosts(): Promise<readonly DatabasePost[]> {
+    return this.pool.connect(async (connection) => {
+      const { rows } = await connection.query<DatabasePost>(sql`SELECT * FROM posts`);
+
+      return rows;
+    });
   }
 }

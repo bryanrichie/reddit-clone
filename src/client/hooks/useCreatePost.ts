@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
+import { getPostsQueryKey } from './useGetPosts';
 
 interface TextPostVariables {
   token: string;
@@ -25,7 +26,13 @@ const createTextPost = async (variables: TextPostVariables): Promise<void> => {
 };
 
 export const useCreateTextPost = () => {
-  return useMutation(createTextPost);
+  const queryClient = useQueryClient();
+
+  return useMutation(createTextPost, {
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries(getPostsQueryKey());
+    },
+  });
 };
 
 const createUrlPost = async (variables: UrlPostVariables): Promise<void> => {
@@ -40,5 +47,11 @@ const createUrlPost = async (variables: UrlPostVariables): Promise<void> => {
 };
 
 export const useCreateUrlPost = () => {
-  return useMutation(createUrlPost);
+  const queryClient = useQueryClient();
+
+  return useMutation(createUrlPost, {
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries(getPostsQueryKey());
+    },
+  });
 };

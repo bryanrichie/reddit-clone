@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { Request } from 'express';
 import jwt from 'jsonwebtoken';
+import path from 'path';
 import { createPool } from 'slonik';
 import { Config, fromEnv } from './config';
 import { CustomError, CustomErrors } from './customError';
@@ -23,8 +24,14 @@ const postService = new PostService(databaseService);
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Reddit clone server');
+app.get('/', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const posts = await postService.getPosts();
+
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/protected', authMiddleware, async (req: Request, res, next) => {
@@ -138,7 +145,7 @@ app.post('/post/:postId', async (req, res, next) => {
   try {
     const { postId } = req.body;
 
-    const post = await postService.servePost(postId);
+    const post = await postService.getPost(postId);
 
     res.status(200).json({ post });
   } catch (error) {
@@ -147,6 +154,10 @@ app.post('/post/:postId', async (req, res, next) => {
 });
 
 app.use(errorMiddleware);
+
+if (config.isProduction) {
+  app.use(express.static(path.join(__dirname, '../client')));
+}
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
