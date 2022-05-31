@@ -57,7 +57,15 @@ export const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack>
-        <Input {...register('email')} id="email" type="email" placeholder="Email" bg="white" />
+        <Input
+          {...register('email')}
+          id="email"
+          type="email"
+          placeholder="Email"
+          _placeholder={{ color: 'gray' }}
+          bg="white"
+          color="black"
+        />
         <Text>{errors.email?.message}</Text>
         <Input
           {...register('username')}
@@ -66,6 +74,7 @@ export const RegisterForm = () => {
           placeholder="Username"
           _placeholder={{ color: 'gray' }}
           bg="white"
+          color="black"
         />
         <Text>{errors.username?.message}</Text>
         <Input
@@ -75,6 +84,7 @@ export const RegisterForm = () => {
           placeholder="Password"
           _placeholder={{ color: 'gray' }}
           bg="white"
+          color="black"
         />
         <Text>{errors.password?.message}</Text>
         <Input

@@ -47,6 +47,7 @@ export const LoginForm = () => {
           placeholder="Username"
           _placeholder={{ color: 'gray' }}
           bg="white"
+          color="black"
         />
         <Text>{errors.username?.message}</Text>
         <Input
@@ -56,6 +57,7 @@ export const LoginForm = () => {
           placeholder="Password"
           _placeholder={{ color: 'gray' }}
           bg="white"
+          color="black"
         />
         <Text>{errors.password?.message}</Text>
         <Input

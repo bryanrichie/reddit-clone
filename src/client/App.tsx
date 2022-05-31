@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { ProtectedPage } from './pages/ProtectedPage';
 
 export function App() {
@@ -14,6 +15,14 @@ export function App() {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />
