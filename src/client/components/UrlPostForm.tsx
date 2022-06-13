@@ -42,6 +42,9 @@ export const UrlPostForm = () => {
   const onSubmit = (data: FormValues) => {
     if (authToken) {
       return createPostMutation.mutateAsync({ ...data, token: authToken }).then((res) => {
+        if (window.location.pathname == '/') {
+          window.location.reload();
+        }
         navigate('/', { replace: true });
       });
     }

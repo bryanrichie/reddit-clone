@@ -14,9 +14,9 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { Link as ReactRouterLink } from 'react-router-dom';
 import React from 'react';
 import { MdAccountCircle, MdLogout, MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { CreatePostModal } from './CreatePostModal';
 
 export const NavBar = () => {

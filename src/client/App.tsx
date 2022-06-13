@@ -1,9 +1,9 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
+import { PostPage } from './pages/PostPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ProtectedPage } from './pages/ProtectedPage';
 
@@ -15,6 +15,14 @@ export function App() {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={`/post/:postId`}
+        element={
+          <ProtectedRoute>
+            <PostPage />
           </ProtectedRoute>
         }
       />
