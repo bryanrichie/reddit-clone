@@ -33,6 +33,7 @@ export const CreatePostModal = () => {
       <Button
         bg={navButtonBg}
         color={navFont}
+        fontWeight="bold"
         _hover={{ bg: navHoverBg, color: navHoverFont }}
         _active={{ bg: navHoverBg, color: navHoverFont }}
         _focus={{ boxShadow: '0' }}

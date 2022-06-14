@@ -141,11 +141,15 @@ app.post('/post/edit', async (req, res, next) => {
   }
 });
 
-app.post('/post/:postId', async (req, res, next) => {
+app.get('/post/:postId', authMiddleware, async (req, res, next) => {
   try {
-    const { postId } = req.body;
+    const { postId } = req.params;
 
     const post = await postService.getPost(postId);
+
+    console.log('post', post, postId);
+
+    console.log('post', post, postId);
 
     res.status(200).json({ post });
   } catch (error) {

@@ -1,25 +1,23 @@
-import { Input, Text, VStack } from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Input, VStack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useAuthContext } from '../context/AuthContext';
+import { useForm } from 'react-hook-form';
 
 interface FormValues {
-  username: string;
+  email: string;
   password: string;
 }
 
 const validationSchema = yup
   .object()
   .shape({
-    username: yup.string().required('Username is required'),
+    email: yup.string().email('Email is invalid').required('Email is required'),
     password: yup.string().required('Password is required'),
   })
   .required();
 
-export const LoginForm = () => {
+export const EmailChangeForm = () => {
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   const {
@@ -28,28 +26,21 @@ export const LoginForm = () => {
     formState: { errors },
   } = useForm<FormValues>(formOptions);
 
-  const navigate = useNavigate();
-  const { login } = useAuthContext();
-
-  const onSubmit = (data: FormValues) => {
-    login.loginAsync(data).then(() => {
-      navigate('/', { replace: true });
-    });
-  };
+  const onSubmit = () => {};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack>
         <Input
-          {...register('username')}
-          id="username"
-          type="username"
-          placeholder="Username"
+          {...register('email')}
+          id="email"
+          type="email"
+          placeholder="New email"
           _placeholder={{ color: 'gray' }}
           bg="white"
           color="black"
         />
-        <Text>{errors.username?.message}</Text>
+        <Text>{errors.email?.message}</Text>
         <Input
           {...register('password')}
           id="password"
@@ -59,10 +50,9 @@ export const LoginForm = () => {
           bg="white"
           color="black"
         />
-        <Text>{errors.password?.message}</Text>
         <Input
           type="submit"
-          value="Login"
+          value="Submit"
           fontSize={'lg'}
           bg="blue.700"
           color="blue.100"

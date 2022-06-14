@@ -4,6 +4,7 @@ import {
   Flex,
   HStack,
   IconButton,
+  Link,
   Menu,
   MenuButton,
   MenuDivider,
@@ -15,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { MdAccountCircle, MdLogout, MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { CreatePostModal } from './CreatePostModal';
 
 export const NavBar = () => {
@@ -25,13 +27,21 @@ export const NavBar = () => {
   const navButtonBg = useColorModeValue('white', 'gray.700');
   const navHoverFont = useColorModeValue('white', 'blue.700');
   const navHoverBg = useColorModeValue('blue.800', 'blue.100');
+  const menuDivider = useColorModeValue('white', 'blue.700');
 
   return (
     <Flex w={'100%'} flexDir="column" mb={5}>
       <HStack h={70} justifyContent={'space-between'} px="20px" bg={navBg}>
-        <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navFont}>
-          reddit clone
-        </Text>
+        <Link
+          as={ReactRouterLink}
+          to="/"
+          _hover={{ textDecoration: 'none' }}
+          _focus={{ boxShadow: 0 }}
+        >
+          <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navFont}>
+            reddit clone
+          </Text>
+        </Link>
         <HStack>
           <CreatePostModal />
           <Menu>
@@ -39,6 +49,7 @@ export const NavBar = () => {
               as={Button}
               bg={navButtonBg}
               color={navFont}
+              fontWeight="bold"
               _hover={{ bg: navHoverBg, color: navHoverFont }}
               _active={{ bg: navHoverBg, color: navHoverFont }}
               _focus={{ boxShadow: '0' }}
@@ -46,14 +57,17 @@ export const NavBar = () => {
               Account <ChevronDownIcon />
             </MenuButton>
             <MenuList bg={navHoverBg} color={navHoverFont}>
-              <MenuItem
-                _hover={{ bg: navButtonBg, color: navFont }}
-                _focus={{ bg: navHoverBg }}
-                fontWeight="bold"
-              >
-                <MdAccountCircle size={'25px'} /> <Text ml="10px">Profile</Text>
-              </MenuItem>
-              <MenuDivider />
+              <Link as={ReactRouterLink} to="/profile" _hover={{ textDecoration: 'none' }}>
+                <MenuItem
+                  _hover={{ bg: navButtonBg, color: navFont }}
+                  _focus={{ bg: navHoverBg }}
+                  fontWeight="bold"
+                >
+                  <MdAccountCircle size={'25px'} /> <Text ml="10px">Profile</Text>
+                </MenuItem>
+              </Link>
+
+              <MenuDivider bg={menuDivider} />
               <MenuItem _hover={{ bg: navButtonBg, color: navFont }} fontWeight="bold">
                 <MdLogout size={'25px'} />
                 <Text ml="10px">Logout</Text>

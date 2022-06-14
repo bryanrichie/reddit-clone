@@ -14,8 +14,9 @@ export interface DatabasePost {
   title: string;
   text: string | null;
   url: string | null;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
+  username: string;
 }
 
 export interface CreateDatabasePostDto {
@@ -154,19 +155,25 @@ export class DatabaseService {
   }
 
   async getPost(postId: string): Promise<DatabasePost> {
-    const queryResult = await this.pool.connect(async (connection) => {
+    return this.pool.connect(async (connection) => {
       return connection.one<DatabasePost>(
-        sql`SELECT *
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
             FROM posts
-            WHERE id = ${postId}`
+            INNER JOIN users
+            ON posts.user_id = users.id
+            WHERE posts.id = ${postId}`
       );
     });
-    return queryResult;
   }
 
   async getPosts(): Promise<readonly DatabasePost[]> {
     return this.pool.connect(async (connection) => {
-      const { rows } = await connection.query<DatabasePost>(sql`SELECT * FROM posts`);
+      const { rows } = await connection.query<DatabasePost>(
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+            FROM posts
+            INNER JOIN users
+            ON posts.user_id = users.id`
+      );
 
       return rows;
     });
