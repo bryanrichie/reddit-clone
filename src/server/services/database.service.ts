@@ -65,17 +65,16 @@ export class DatabaseService {
     });
   }
 
-  async writeUser(user: DatabaseUser): Promise<DatabaseUser> {
+  async writeUser(user: DatabaseUser): Promise<void> {
     const { email, username, password } = user;
 
-    const queryResult = await this.pool.connect(async (connection) => {
-      return connection.one<DatabaseUser>(
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabaseUser>(
         sql`INSERT INTO users (email, username, password_hash) 
             VALUES (${email}, ${username}, ${password}) 
             RETURNING email, username`
       );
     });
-    return queryResult;
   }
 
   async updateUser(userId: string, user: DatabaseUser): Promise<DatabaseUser> {
@@ -133,7 +132,7 @@ export class DatabaseService {
     const { userId, title, text, url } = userPost;
 
     await this.pool.connect(async (connection) => {
-      return connection.one<DatabasePost>(
+      return connection.query<DatabasePost>(
         sql`INSERT INTO posts (user_id, title, text, url) 
             VALUES (${userId}, ${title}, ${text}, ${url})`
       );
@@ -197,9 +196,9 @@ export class DatabaseService {
     const { userId, postId, comment } = postComment;
 
     await this.pool.connect(async (connection) => {
-      return connection.one<DatabaseComment>(
+      return connection.query<DatabaseComment>(
         sql`INSERT INTO comments (user_id, post_id, comment)
-            VALUES (user_id = ${userId}, post_id = ${postId}, comment = ${comment})`
+            VALUES (${userId}, ${postId}, ${comment})`
       );
     });
   }

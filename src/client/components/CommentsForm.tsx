@@ -2,6 +2,7 @@ import { Input, Textarea, useColorModeValue, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAddComment } from '../hooks/useAddComment';
 import { useAuth } from '../hooks/useAuth';
@@ -18,7 +19,8 @@ const validationSchema = yup
   .required();
 
 export const CommentsForm = () => {
-  const addCommentMutation = useAddComment();
+  const { postId } = useParams<{ postId: string }>();
+  const addCommentMutation = useAddComment(postId ?? '');
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
 
@@ -38,11 +40,10 @@ export const CommentsForm = () => {
     (data: FormValues) => {
       if (authToken) {
         const request = {
+          postId: postId ?? '',
           comment: data.comment,
         };
-        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
-          window.location.reload();
-        });
+        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
       }
     },
     [addCommentMutation]

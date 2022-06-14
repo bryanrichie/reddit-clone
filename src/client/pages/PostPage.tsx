@@ -1,7 +1,7 @@
 import { Flex, HStack, Image, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 import _ from 'lodash';
 import React from 'react';
-import { MdArrowCircleDown, MdArrowCircleUp, MdLink, MdOutlineModeComment } from 'react-icons/md';
+import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { Comments } from '../components/Comments';
 import { CommentsForm } from '../components/CommentsForm';

@@ -3,10 +3,6 @@ export interface User {
   username: string;
 }
 
-export interface Post {
-  id: string;
-}
-
 export interface JwtToken {
   exp: number;
   id: string;

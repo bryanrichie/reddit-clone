@@ -153,23 +153,22 @@ app.get('/post/:postId', authMiddleware, async (req, res, next) => {
   }
 });
 
-app.post('/comment/add', authMiddleware, async (req: Request, res, next) => {
+app.post('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
+  console.log(req.body);
   try {
-    const { comment } = req.body;
-
-    const userComment = await postService.addComment({
+    const comment = await postService.addComment({
       userId: req.user.id,
-      postId: req.post.id,
-      comment,
+      postId: req.body.postId,
+      comment: req.body.comment,
     });
 
-    res.status(200).json({ userComment });
+    res.status(200).json({ comment });
   } catch (error) {
     next(error);
   }
 });
 
-app.get('/comments', authMiddleware, async (req: Request, res, next) => {
+app.get('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
   try {
     const { postId } = req.params;
 

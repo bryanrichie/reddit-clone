@@ -3,8 +3,8 @@ import { useQuery } from 'react-query';
 import { DatabaseComment } from '../../server/services/database.service';
 import { useAuthContext } from '../context/AuthContext';
 
-const getComments = async (token?: string): Promise<readonly DatabaseComment[]> => {
-  const { data } = await axios('http://localhost:8080/comments', {
+const getComments = async (postId: string, token?: string): Promise<readonly DatabaseComment[]> => {
+  const { data } = await axios(`http://localhost:8080/posts/${postId}/comments`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token ?? ''}`,
@@ -13,12 +13,12 @@ const getComments = async (token?: string): Promise<readonly DatabaseComment[]> 
   return data;
 };
 
-export const getCommentsQueryKey = () => ['comments'];
+export const getCommentsQueryKey = (postId: string) => ['comments', postId];
 
-export const useGetComments = () => {
+export const useGetComments = (postId: string) => {
   const { authToken } = useAuthContext();
 
-  return useQuery<readonly DatabaseComment[], Error>(getCommentsQueryKey(), () =>
-    getComments(authToken)
+  return useQuery<readonly DatabaseComment[], Error>(getCommentsQueryKey(postId), () =>
+    getComments(postId, authToken)
   );
 };
