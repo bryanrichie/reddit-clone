@@ -10,6 +10,8 @@ export const errorMiddleware = (
   next: NextFunction
 ) => {
   if (!isCustomError(error)) {
+    console.log('ERR', error);
+
     error = new CustomError({
       type: CustomErrors.InternalServerError,
       message: error.message,

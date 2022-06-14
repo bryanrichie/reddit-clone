@@ -32,6 +32,22 @@ export interface UpdateDatabasePostDto {
   url?: string | null;
 }
 
+export interface DatabaseComment {
+  id: string;
+  postId: string;
+  userId: string;
+  comment: string;
+  created_at: string;
+  updated_at: string;
+  username: string;
+}
+
+export interface AddCommentDto {
+  userId: string;
+  postId: string;
+  comment: string;
+}
+
 export class DatabaseService {
   pool: DatabasePool;
 
@@ -113,17 +129,15 @@ export class DatabaseService {
     });
   }
 
-  async createPost(userPost: CreateDatabasePostDto): Promise<DatabasePost> {
+  async createPost(userPost: CreateDatabasePostDto): Promise<void> {
     const { userId, title, text, url } = userPost;
 
-    const queryResult = await this.pool.connect(async (connection) => {
+    await this.pool.connect(async (connection) => {
       return connection.one<DatabasePost>(
         sql`INSERT INTO posts (user_id, title, text, url) 
-            VALUES (${userId}, ${title}, ${text}, ${url}) 
-            RETURNING *`
+            VALUES (${userId}, ${title}, ${text}, ${url})`
       );
     });
-    return queryResult;
   }
 
   async deletePost(postId: string, userId: string): Promise<void> {
@@ -175,6 +189,30 @@ export class DatabaseService {
             ON posts.user_id = users.id`
       );
 
+      return rows;
+    });
+  }
+
+  async addComment(postComment: AddCommentDto): Promise<void> {
+    const { userId, postId, comment } = postComment;
+
+    await this.pool.connect(async (connection) => {
+      return connection.one<DatabaseComment>(
+        sql`INSERT INTO comments (user_id, post_id, comment)
+            VALUES (user_id = ${userId}, post_id = ${postId}, comment = ${comment})`
+      );
+    });
+  }
+
+  async getComments(postId: string): Promise<readonly DatabaseComment[]> {
+    return this.pool.connect(async (connection) => {
+      const { rows } = await connection.query<DatabaseComment>(
+        sql`SELECT comments.id, comments.comment, comments.created_at, comments.updated_at, users.username
+            FROM comments
+            INNER JOIN posts ON comments.post_id = posts.id
+            INNER JOIN users ON comments.user_id = users.id
+            WHERE posts.id = ${postId}`
+      );
       return rows;
     });
   }

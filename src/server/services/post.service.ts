@@ -1,5 +1,7 @@
 import {
+  AddCommentDto,
   CreateDatabasePostDto,
+  DatabaseComment,
   DatabasePost,
   DatabaseService,
   UpdateDatabasePostDto,
@@ -12,7 +14,7 @@ export class PostService {
     this.databaseService = databaseService;
   }
 
-  createPost(post: CreateDatabasePostDto): Promise<DatabasePost> {
+  createPost(post: CreateDatabasePostDto): Promise<void> {
     return this.databaseService.createPost(post);
   }
 
@@ -30,5 +32,13 @@ export class PostService {
 
   getPost(postId: string): Promise<DatabasePost> {
     return this.databaseService.getPost(postId);
+  }
+
+  addComment(comment: AddCommentDto): Promise<void> {
+    return this.databaseService.addComment(comment);
+  }
+
+  getComments(postId: string): Promise<readonly DatabaseComment[]> {
+    return this.databaseService.getComments(postId);
   }
 }

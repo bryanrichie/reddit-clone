@@ -54,8 +54,7 @@ CREATE TABLE "comments" (
   "id" uuid NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
   "user_id" uuid NOT NULL,
   "post_id" uuid NOT NULL,
-  "body" VARCHAR(10000),
-  "image" TEXT,
+  "comment" VARCHAR(10000),
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   PRIMARY KEY ("id"),
@@ -69,9 +68,7 @@ CREATE INDEX ON "comments" (user_id);
 
 CREATE INDEX ON "comments" (post_id);
 
-CREATE INDEX ON "comments" (body);
-
-CREATE INDEX ON "comments" (image);
+CREATE INDEX ON "comments" (comment);
 
 CREATE INDEX ON "comments" (created_at);
 
