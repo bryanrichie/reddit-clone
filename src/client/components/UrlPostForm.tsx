@@ -13,8 +13,7 @@ interface FormValues {
 }
 
 const validationSchema = yup
-  .object()
-  .shape({
+  .object({
     title: yup.string().max(300).required(),
     url: yup.string().url().required(),
   })

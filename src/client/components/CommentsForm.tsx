@@ -7,21 +7,21 @@ import { useWindowScroll } from 'react-use';
 import * as yup from 'yup';
 import { useAddComment } from '../hooks/useAddComment';
 import { useAuth } from '../hooks/useAuth';
+import { useRequiredParams } from '../utils/useRequiredParams';
 
 interface FormValues {
   comment: string;
 }
 
 const validationSchema = yup
-  .object()
-  .shape({
+  .object({
     comment: yup.string().max(10000).required(),
   })
   .required();
 
 export const CommentsForm = () => {
-  const { postId } = useParams<{ postId: string }>();
-  const addCommentMutation = useAddComment(postId ?? '');
+  const { postId } = useRequiredParams();
+  const addCommentMutation = useAddComment((postId as string) ?? '');
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
 
@@ -41,7 +41,7 @@ export const CommentsForm = () => {
     (data: FormValues) => {
       if (authToken) {
         const request = {
-          postId: postId ?? '',
+          postId: (postId as string) ?? '',
           comment: data.comment,
         };
         return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {

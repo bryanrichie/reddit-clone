@@ -7,10 +7,11 @@ import { Comments } from '../components/Comments';
 import { CommentsForm } from '../components/CommentsForm';
 import { NavBar } from '../components/NavBar';
 import { useGetSinglePost } from '../hooks/useGetSinglePost';
+import { useRequiredParams } from '../utils/useRequiredParams';
 
 export const PostPage = () => {
-  const { postId } = useParams<{ postId: string }>();
-  const { data, isLoading, error } = useGetSinglePost(postId ?? '');
+  const { postId } = useRequiredParams();
+  const { data, isLoading, error } = useGetSinglePost(postId as string);
 
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const postBg = useColorModeValue('white', 'gray.700');

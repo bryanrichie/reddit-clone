@@ -14,8 +14,7 @@ interface FormValues {
 }
 
 const validationSchema = yup
-  .object()
-  .shape({
+  .object({
     title: yup.string().max(300).required(),
     text: yup.string().max(40000).optional(),
   })

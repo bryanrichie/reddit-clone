@@ -144,7 +144,6 @@ app.get('/post/:postId', authMiddleware, async (req, res, next) => {
 });
 
 app.post('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
-  console.log(req.body);
   try {
     const comment = await postService.addComment({
       userId: req.user.id,

@@ -12,8 +12,7 @@ interface FormValues {
 }
 
 const validationSchema = yup
-  .object()
-  .shape({
+  .object({
     username: yup.string().required('Username is required'),
     password: yup.string().required('Password is required'),
   })

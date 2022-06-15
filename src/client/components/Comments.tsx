@@ -4,10 +4,11 @@ import React from 'react';
 import { VscCommentDiscussion } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
 import { useGetComments } from '../hooks/useGetComments';
+import { useRequiredParams } from '../utils/useRequiredParams';
 
 export const Comments = () => {
-  const { postId } = useParams<{ postId: string }>();
-  const { data, isLoading, error } = useGetComments(postId ?? '');
+  const { postId } = useRequiredParams();
+  const { data, isLoading, error } = useGetComments((postId as string) ?? '');
 
   const comments = _.map(data, (comment) => {
     const timeNow = Date.now();
