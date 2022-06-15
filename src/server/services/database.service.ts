@@ -17,6 +17,7 @@ export interface DatabasePost {
   created_at: string;
   updated_at: string;
   username: string;
+  comment_count: string;
 }
 
 export interface CreateDatabasePostDto {
@@ -121,13 +122,6 @@ export class DatabaseService {
     });
   }
 
-  async getUsers(): Promise<readonly User[]> {
-    return this.pool.connect(async (connection) => {
-      const { rows } = await connection.query<User>(sql`SELECT id, username FROM users;`);
-      return rows;
-    });
-  }
-
   async createPost(userPost: CreateDatabasePostDto): Promise<void> {
     const { userId, title, text, url } = userPost;
 
@@ -170,7 +164,7 @@ export class DatabaseService {
   async getPost(postId: string): Promise<DatabasePost> {
     return this.pool.connect(async (connection) => {
       return connection.one<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = ${postId})
             FROM posts
             INNER JOIN users
             ON posts.user_id = users.id
@@ -179,13 +173,25 @@ export class DatabaseService {
     });
   }
 
+  // async getPosts(): Promise<readonly DatabasePost[]> {
+  //   return this.pool.connect(async (connection) => {
+  //     const { rows } = await connection.query<DatabasePost>(
+  //       sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+  //           FROM posts
+  //           INNER JOIN users ON posts.user_id = users.id`
+  //     );
+
+  //     return rows;
+  //   });
+  // }
+
   async getPosts(): Promise<readonly DatabasePost[]> {
     return this.pool.connect(async (connection) => {
       const { rows } = await connection.query<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
+            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = posts.id)
             FROM posts
-            INNER JOIN users
-            ON posts.user_id = users.id`
+            INNER JOIN users ON posts.user_id = users.id`
       );
 
       return rows;

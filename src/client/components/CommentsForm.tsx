@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import { useWindowScroll } from 'react-use';
 import * as yup from 'yup';
 import { useAddComment } from '../hooks/useAddComment';
 import { useAuth } from '../hooks/useAuth';
@@ -43,7 +44,9 @@ export const CommentsForm = () => {
           postId: postId ?? '',
           comment: data.comment,
         };
-        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
+        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
+          window.location.reload();
+        });
       }
     },
     [addCommentMutation]
@@ -62,7 +65,7 @@ export const CommentsForm = () => {
           bg={'white'}
           borderColor="gray"
           h={150}
-          w={[400, 500, 700, 800, 900]}
+          w={[300, 500, 650, 750, 900]}
         />
         <Input
           type="submit"
