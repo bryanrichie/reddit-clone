@@ -5,7 +5,6 @@ import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { PostPage } from './pages/PostPage';
 import { ProfilePage } from './pages/ProfilePage';
-import { ProtectedPage } from './pages/ProtectedPage';
 
 export function App() {
   return (
@@ -34,14 +33,7 @@ export function App() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/protected"
-        element={
-          <ProtectedRoute>
-            <ProtectedPage />
-          </ProtectedRoute>
-        }
-      />
+
       <Route path="/login" element={<LoginPage />} />
     </Routes>
   );

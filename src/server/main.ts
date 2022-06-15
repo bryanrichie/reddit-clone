@@ -34,16 +34,6 @@ app.get('/', authMiddleware, async (req: Request, res, next) => {
   }
 });
 
-app.get('/protected', authMiddleware, async (req: Request, res, next) => {
-  try {
-    const users = await userService.getUsers();
-
-    res.status(200).json(users);
-  } catch (error) {
-    next(error);
-  }
-});
-
 app.post('/register', async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
@@ -88,17 +78,17 @@ app.post('/login', async (req, res, next) => {
   }
 });
 
-app.post('/user/update', async (req, res, next) => {
-  try {
-    const { userId, email, username, password } = req.body;
+// app.post('/user/update', async (req, res, next) => {
+//   try {
+//     const { userId, email, username, password } = req.body;
 
-    const updatedUser = await userService.updateUser(userId, email, username, password);
+//     const updatedUser = await userService.updateUser(userId, email, username, password);
 
-    res.status(200).json({ updatedUser, status: 'User successfully updated.' });
-  } catch (error) {
-    next(error);
-  }
-});
+//     res.status(200).json({ updatedUser, status: 'User successfully updated.' });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 app.post('/post/create', authMiddleware, async (req: Request, res, next) => {
   try {
@@ -117,29 +107,29 @@ app.post('/post/create', authMiddleware, async (req: Request, res, next) => {
   }
 });
 
-app.post('/post/delete', async (req, res, next) => {
-  try {
-    const { postId, userId } = req.body;
+// app.post('/post/delete', async (req, res, next) => {
+//   try {
+//     const { postId, userId } = req.body;
 
-    const deletedPost = await postService.deletePost(postId, userId);
+//     const deletedPost = await postService.deletePost(postId, userId);
 
-    res.status(200).json({ deletedPost, status: 'Post successfully deleted.' });
-  } catch (error) {
-    next(error);
-  }
-});
+//     res.status(200).json({ deletedPost, status: 'Post successfully deleted.' });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-app.post('/post/edit', async (req, res, next) => {
-  try {
-    const { postId, title, text, url } = req.body;
+// app.post('/post/edit', async (req, res, next) => {
+//   try {
+//     const { postId, title, text, url } = req.body;
 
-    const editedPost = await postService.editPost(postId, { title, text, url });
+//     const editedPost = await postService.editPost(postId, { title, text, url });
 
-    res.status(200).json({ editedPost, status: 'Post successfully edited.' });
-  } catch (error) {
-    next(error);
-  }
-});
+//     res.status(200).json({ editedPost, status: 'Post successfully edited.' });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 app.get('/post/:postId', authMiddleware, async (req, res, next) => {
   try {
@@ -147,11 +137,33 @@ app.get('/post/:postId', authMiddleware, async (req, res, next) => {
 
     const post = await postService.getPost(postId);
 
-    console.log('post', post, postId);
-
-    console.log('post', post, postId);
-
     res.status(200).json({ post });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const comment = await postService.addComment({
+      userId: req.user.id,
+      postId: req.body.postId,
+      comment: req.body.comment,
+    });
+
+    res.status(200).json({ comment });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const { postId } = req.params;
+
+    const comments = await postService.getComments(postId);
+
+    res.status(200).json(comments);
   } catch (error) {
     next(error);
   }

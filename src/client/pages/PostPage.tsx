@@ -1,16 +1,17 @@
-import { Flex, HStack, Image, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Flex, HStack, Image, Spinner, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 import _ from 'lodash';
 import React from 'react';
-import { MdArrowCircleDown, MdArrowCircleUp, MdLink, MdOutlineModeComment } from 'react-icons/md';
+import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { Comments } from '../components/Comments';
 import { CommentsForm } from '../components/CommentsForm';
 import { NavBar } from '../components/NavBar';
 import { useGetSinglePost } from '../hooks/useGetSinglePost';
+import { useRequiredParams } from '../utils/useRequiredParams';
 
 export const PostPage = () => {
-  const { postId } = useParams<{ postId: string }>();
-  const { data, isLoading, error } = useGetSinglePost(postId ?? '');
+  const { postId } = useRequiredParams();
+  const { data, isLoading, error } = useGetSinglePost(postId as string);
 
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const postBg = useColorModeValue('white', 'gray.700');
@@ -37,6 +38,15 @@ export const PostPage = () => {
       }
     };
 
+    const commentCount = () => {
+      if (_.toNumber(post.comment_count) < 1) {
+        return <Text color={'gray.500'}>Comment</Text>;
+      } else if (_.toNumber(post.comment_count) == 1) {
+        return <Text color={'gray.500'}>{post.comment_count} Comment</Text>;
+      }
+      return <Text color={'gray.500'}>{post.comment_count} Comments</Text>;
+    };
+
     const isTitleOnlyPost = !post.text && !post.url;
     const content =
       post.text && !post.url ? (
@@ -52,6 +62,7 @@ export const PostPage = () => {
       );
     return (
       <VStack
+        key={post.id}
         borderRadius="md"
         bg={postBg}
         border="1px"
@@ -85,31 +96,42 @@ export const PostPage = () => {
         <HStack pt={5} fontWeight="bold" pl={'60px'} spacing={10}>
           <HStack>
             <MdOutlineModeComment color="#718096" size={'20px'} />
-            <Text color={'gray.500'}>Comments</Text>
+            {commentCount()}
           </HStack>
         </HStack>
       </VStack>
     );
   });
 
+  const checkLoading = () => {
+    if (isLoading) {
+      return <Spinner size="xl" alignSelf={'center'} />;
+    }
+    return (
+      <>
+        {post}
+        <VStack
+          mt={3}
+          borderRadius="md"
+          bg={postBg}
+          border="1px"
+          borderColor={postBorder}
+          p={5}
+          w={[null, '100%', '90%', '80%', '70%', '60%']}
+          mx="auto"
+          spacing={5}
+        >
+          <CommentsForm />
+          <Comments />
+        </VStack>
+      </>
+    );
+  };
+
   return (
     <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
       <NavBar />
-      {post}
-      <VStack
-        mt={3}
-        borderRadius="md"
-        bg={postBg}
-        border="1px"
-        borderColor={postBorder}
-        p={5}
-        w={[null, '100%', '90%', '80%', '70%', '60%']}
-        mx="auto"
-        spacing={5}
-      >
-        <CommentsForm />
-        <Comments />
-      </VStack>
+      {checkLoading()}
     </Flex>
   );
 };

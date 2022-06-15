@@ -4,6 +4,7 @@ import {
   Image,
   Link,
   ListItem,
+  Spinner,
   Text,
   UnorderedList,
   useColorModeValue,
@@ -11,13 +12,13 @@ import {
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import React from 'react';
-import { MdArrowCircleDown, MdArrowCircleUp, MdLink, MdOutlineModeComment } from 'react-icons/md';
+import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { NavBar } from '../components/NavBar';
 import { useGetPosts } from '../hooks/useGetPosts';
 
 export const HomePage = () => {
-  const { data } = useGetPosts();
+  const { data, isLoading } = useGetPosts();
 
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const postBg = useColorModeValue('white', 'gray.700');
@@ -46,6 +47,15 @@ export const HomePage = () => {
       } else {
         return `${days} days`;
       }
+    };
+
+    const commentCount = () => {
+      if (_.toNumber(post.comment_count) < 1) {
+        return <Text color={'gray.500'}>Comment</Text>;
+      } else if (_.toNumber(post.comment_count) == 1) {
+        return <Text color={'gray.500'}>{post.comment_count} Comment</Text>;
+      }
+      return <Text color={'gray.500'}>{post.comment_count} Comments</Text>;
     };
 
     const isTitleOnlyPost = !post.text && !post.url;
@@ -117,7 +127,7 @@ export const HomePage = () => {
           <HStack pt={5} fontWeight="bold" ml={'60px'} spacing={10}>
             <HStack>
               <MdOutlineModeComment color="#718096" size={'20px'} />
-              <Text color={'gray.500'}>Comments</Text>
+              {commentCount()}
             </HStack>
           </HStack>
         </ListItem>
@@ -125,9 +135,11 @@ export const HomePage = () => {
     );
   });
 
-  return (
-    <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
-      <NavBar />
+  const checkLoading = () => {
+    if (isLoading) {
+      return <Spinner size="xl" alignSelf={'center'} />;
+    }
+    return (
       <UnorderedList
         alignSelf={'center'}
         spacing={3}
@@ -136,6 +148,13 @@ export const HomePage = () => {
       >
         {posts}
       </UnorderedList>
+    );
+  };
+
+  return (
+    <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
+      <NavBar />
+      {checkLoading()}
     </Flex>
   );
 };

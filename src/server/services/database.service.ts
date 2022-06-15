@@ -17,6 +17,7 @@ export interface DatabasePost {
   created_at: string;
   updated_at: string;
   username: string;
+  comment_count: string;
 }
 
 export interface CreateDatabasePostDto {
@@ -30,6 +31,22 @@ export interface UpdateDatabasePostDto {
   title?: string | null;
   text?: string | null;
   url?: string | null;
+}
+
+export interface DatabaseComment {
+  id: string;
+  postId: string;
+  userId: string;
+  comment: string;
+  created_at: string;
+  updated_at: string;
+  username: string;
+}
+
+export interface AddCommentDto {
+  userId: string;
+  postId: string;
+  comment: string;
 }
 
 export class DatabaseService {
@@ -49,17 +66,16 @@ export class DatabaseService {
     });
   }
 
-  async writeUser(user: DatabaseUser): Promise<DatabaseUser> {
+  async writeUser(user: DatabaseUser): Promise<void> {
     const { email, username, password } = user;
 
-    const queryResult = await this.pool.connect(async (connection) => {
-      return connection.one<DatabaseUser>(
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabaseUser>(
         sql`INSERT INTO users (email, username, password_hash) 
             VALUES (${email}, ${username}, ${password}) 
             RETURNING email, username`
       );
     });
-    return queryResult;
   }
 
   async updateUser(userId: string, user: DatabaseUser): Promise<DatabaseUser> {
@@ -106,24 +122,15 @@ export class DatabaseService {
     });
   }
 
-  async getUsers(): Promise<readonly User[]> {
-    return this.pool.connect(async (connection) => {
-      const { rows } = await connection.query<User>(sql`SELECT id, username FROM users;`);
-      return rows;
-    });
-  }
-
-  async createPost(userPost: CreateDatabasePostDto): Promise<DatabasePost> {
+  async createPost(userPost: CreateDatabasePostDto): Promise<void> {
     const { userId, title, text, url } = userPost;
 
-    const queryResult = await this.pool.connect(async (connection) => {
-      return connection.one<DatabasePost>(
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabasePost>(
         sql`INSERT INTO posts (user_id, title, text, url) 
-            VALUES (${userId}, ${title}, ${text}, ${url}) 
-            RETURNING *`
+            VALUES (${userId}, ${title}, ${text}, ${url})`
       );
     });
-    return queryResult;
   }
 
   async deletePost(postId: string, userId: string): Promise<void> {
@@ -157,7 +164,7 @@ export class DatabaseService {
   async getPost(postId: string): Promise<DatabasePost> {
     return this.pool.connect(async (connection) => {
       return connection.one<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = ${postId})
             FROM posts
             INNER JOIN users
             ON posts.user_id = users.id
@@ -166,15 +173,51 @@ export class DatabaseService {
     });
   }
 
+  // async getPosts(): Promise<readonly DatabasePost[]> {
+  //   return this.pool.connect(async (connection) => {
+  //     const { rows } = await connection.query<DatabasePost>(
+  //       sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+  //           FROM posts
+  //           INNER JOIN users ON posts.user_id = users.id`
+  //     );
+
+  //     return rows;
+  //   });
+  // }
+
   async getPosts(): Promise<readonly DatabasePost[]> {
     return this.pool.connect(async (connection) => {
       const { rows } = await connection.query<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
+            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = posts.id)
             FROM posts
-            INNER JOIN users
-            ON posts.user_id = users.id`
+            INNER JOIN users ON posts.user_id = users.id`
       );
 
+      return rows;
+    });
+  }
+
+  async addComment(postComment: AddCommentDto): Promise<void> {
+    const { userId, postId, comment } = postComment;
+
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabaseComment>(
+        sql`INSERT INTO comments (user_id, post_id, comment)
+            VALUES (${userId}, ${postId}, ${comment})`
+      );
+    });
+  }
+
+  async getComments(postId: string): Promise<readonly DatabaseComment[]> {
+    return this.pool.connect(async (connection) => {
+      const { rows } = await connection.query<DatabaseComment>(
+        sql`SELECT comments.id, comments.comment, comments.created_at, comments.updated_at, users.username
+            FROM comments
+            INNER JOIN posts ON comments.post_id = posts.id
+            INNER JOIN users ON comments.user_id = users.id
+            WHERE posts.id = ${postId}`
+      );
       return rows;
     });
   }

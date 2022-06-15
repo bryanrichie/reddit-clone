@@ -1,28 +1,27 @@
-import { Input, Textarea, useColorModeValue, VStack, Flex } from '@chakra-ui/react';
+import { Input, Textarea, useColorModeValue, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import _ from 'lodash';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useWindowScroll } from 'react-use';
 import * as yup from 'yup';
+import { useAddComment } from '../hooks/useAddComment';
 import { useAuth } from '../hooks/useAuth';
-import { useCreateTextPost } from '../hooks/useCreatePost';
+import { useRequiredParams } from '../utils/useRequiredParams';
 
 interface FormValues {
-  title: string;
-  text?: string;
+  comment: string;
 }
 
 const validationSchema = yup
-  .object()
-  .shape({
-    title: yup.string().max(300).required(),
-    text: yup.string().optional(),
+  .object({
+    comment: yup.string().max(10000).required(),
   })
   .required();
 
 export const CommentsForm = () => {
-  const createPostMutation = useCreateTextPost();
+  const { postId } = useRequiredParams();
+  const addCommentMutation = useAddComment((postId as string) ?? '');
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
 
@@ -38,39 +37,35 @@ export const CommentsForm = () => {
     formState: { errors },
   } = useForm<FormValues>(formOptions);
 
-  const navigate = useNavigate();
-
   const onSubmit = React.useCallback(
     (data: FormValues) => {
-      // if (authToken) {
-      //   const request = {
-      //     title: data.title,
-      //     text: !_.isEmpty(data.text) ? data.text : null,
-      //   };
-      //   return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
-      //     if (window.location.pathname == '/') {
-      //       window.location.reload();
-      //     }
-      //     navigate('/', { replace: true });
-      //   });
-      // }
+      if (authToken) {
+        const request = {
+          postId: (postId as string) ?? '',
+          comment: data.comment,
+        };
+        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
+          window.location.reload();
+        });
+      }
     },
-    [createPostMutation]
+    [addCommentMutation]
   );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack spacing={2}>
         <Textarea
-          {...register('text')}
+          {...register('comment')}
           id="comment"
           placeholder="What do you think?"
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputBorder}
           borderRadius="0"
           bg={'white'}
+          borderColor="gray"
           h={150}
-          w={[400, 500, 700, 800, 900]}
+          w={[300, 500, 650, 750, 900]}
         />
         <Input
           type="submit"
