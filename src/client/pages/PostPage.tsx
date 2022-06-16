@@ -10,8 +10,8 @@ import { useGetSinglePost } from '../hooks/useGetSinglePost';
 import { useRequiredParams } from '../utils/useRequiredParams';
 
 export const PostPage = () => {
-  const { postId } = useRequiredParams();
-  const { data, isLoading, error } = useGetSinglePost(postId as string);
+  const { postId } = useRequiredParams<{ postId: string }>();
+  const { data, isLoading, error } = useGetSinglePost(postId);
 
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const postBg = useColorModeValue('white', 'gray.700');

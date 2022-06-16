@@ -20,8 +20,8 @@ const validationSchema = yup
   .required();
 
 export const CommentsForm = () => {
-  const { postId } = useRequiredParams();
-  const addCommentMutation = useAddComment((postId as string) ?? '');
+  const { postId } = useRequiredParams<{ postId: string }>();
+  const addCommentMutation = useAddComment(postId);
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
 

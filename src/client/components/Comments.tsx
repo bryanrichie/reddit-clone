@@ -7,8 +7,8 @@ import { useGetComments } from '../hooks/useGetComments';
 import { useRequiredParams } from '../utils/useRequiredParams';
 
 export const Comments = () => {
-  const { postId } = useRequiredParams();
-  const { data, isLoading, error } = useGetComments((postId as string) ?? '');
+  const { postId } = useRequiredParams<{ postId: string }>();
+  const { data, isLoading, error } = useGetComments(postId);
 
   const comments = _.map(data, (comment) => {
     const timeNow = Date.now();
