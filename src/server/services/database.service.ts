@@ -49,6 +49,19 @@ export interface AddCommentDto {
   comment: string;
 }
 
+export interface DatabasePostVote {
+  id: string;
+  postId: string;
+  userId: string;
+  vote: boolean;
+}
+
+export interface AddPostVoteDto {
+  postId: string;
+  userId: string;
+  vote: boolean;
+}
+
 export class DatabaseService {
   pool: DatabasePool;
 
@@ -216,6 +229,29 @@ export class DatabaseService {
             FROM comments
             INNER JOIN posts ON comments.post_id = posts.id
             INNER JOIN users ON comments.user_id = users.id
+            WHERE posts.id = ${postId}`
+      );
+      return rows;
+    });
+  }
+
+  async addVote(postVote: AddPostVoteDto): Promise<void> {
+    const { userId, postId, vote } = postVote;
+
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabasePostVote>(
+        sql`INSERT INTO user_post_votes (user_id, post_id, vote)
+            VALUES (${userId}, ${postId}, ${vote})`
+      );
+    });
+  }
+
+  async getPostVotes(postId: string): Promise<readonly DatabasePostVote[]> {
+    return this.pool.connect(async (connection) => {
+      const { rows } = await connection.query<DatabasePostVote>(
+        sql`SELECT user_post_votes.vote
+            FROM user_post_votes
+            INNER JOIN posts ON user_post_votes.post_id = posts.id
             WHERE posts.id = ${postId}`
       );
       return rows;

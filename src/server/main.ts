@@ -169,6 +169,32 @@ app.get('/posts/:postId/comments', authMiddleware, async (req: Request, res, nex
   }
 });
 
+app.post('/posts/:postId/votes', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const vote = await postService.addPostVote({
+      userId: req.user.id,
+      postId: req.body.postId,
+      vote: req.body.vote,
+    });
+
+    res.status(200).json({ vote });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('posts/:postId/votes', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const { postId } = req.params;
+
+    const votes = await postService.getPostVotes(postId);
+
+    res.status(200).json(votes);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use(errorMiddleware);
 
 if (config.isProduction) {

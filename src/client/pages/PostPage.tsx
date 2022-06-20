@@ -1,4 +1,13 @@
-import { Flex, HStack, Image, Spinner, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import {
+  Flex,
+  HStack,
+  IconButton,
+  Image,
+  Spinner,
+  Text,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react';
 import _ from 'lodash';
 import React from 'react';
 import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
@@ -75,7 +84,12 @@ export const PostPage = () => {
       >
         <HStack spacing={5} w="100%">
           <VStack alignSelf="flex-start">
-            <MdArrowCircleUp size={'40px'} />
+            <IconButton
+              aria-label="Upvote"
+              bg="none"
+              _focus={{ boxShadow: '0' }}
+              icon={<MdArrowCircleUp size={'40px'} />}
+            />
             <Text>0</Text>
             <MdArrowCircleDown size={'40px'} />
           </VStack>
