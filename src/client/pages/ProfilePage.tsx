@@ -13,10 +13,9 @@ import {
   ModalBody,
 } from '@chakra-ui/react';
 import React from 'react';
-import { EmailChangeModal } from '../components/EmailChangeModal';
+
 import { NavBar } from '../components/NavBar';
 import { PasswordChangeModal } from '../components/PasswordChangeModal';
-import { UsernameChangeModal } from '../components/UsernameChangeModal';
 
 export const ProfilePage = () => {
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
@@ -65,7 +64,6 @@ export const ProfilePage = () => {
             </Text>
             <Text fontSize={'sm'}>placeholder@gmail.com</Text>
           </VStack>
-          <EmailChangeModal />
         </HStack>
         <HStack justify={'space-between'} w="100%" p={5}>
           <VStack align={'flex-start'} spacing={0}>
@@ -74,14 +72,12 @@ export const ProfilePage = () => {
             </Text>
             <Text fontSize={'sm'}>Placeholder</Text>
           </VStack>
-          <UsernameChangeModal />
         </HStack>
         <HStack justify={'space-between'} w="100%" p={5}>
           <VStack align={'flex-start'} spacing={0}>
             <Text fontSize={'lg'} fontWeight={'bold'}>
               Change password
             </Text>
-            <Text fontSize={'sm'}>Password must be at least 12 characters long</Text>
           </VStack>
           <PasswordChangeModal />
         </HStack>

@@ -1,0 +1,75 @@
+import { HStack, IconButton, Image, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import _ from 'lodash';
+import React from 'react';
+import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
+import { DatabasePost } from '../../server/services/database.service';
+import { Timestamp } from '../components/Timestamp';
+import { useAuthContext } from '../context/AuthContext';
+import { useAddPostVote } from '../hooks/usePostVote';
+import { CommentCount } from './CommentCount';
+import { VoteButtons } from './VoteButtons';
+import { VoteCount } from './VoteCount';
+
+interface Props {
+  postId: string;
+  post: DatabasePost;
+}
+
+export const Post = (props: Props) => {
+  const { postId, post } = props;
+
+  const postBg = useColorModeValue('white', 'gray.700');
+  const postBorder = useColorModeValue('gray.700', 'white');
+
+  const isTitleOnlyPost = !post.text && !post.url;
+  const content =
+    post.text && !post.url ? (
+      <Text pt={3}>{post.text}</Text>
+    ) : (
+      <Image pt={3} alignSelf={'center'} maxH={'300px'} objectFit={'cover'} src={post.url ?? ''} />
+    );
+
+  return (
+    <VStack
+      key={post.id}
+      borderRadius="md"
+      bg={postBg}
+      border="1px"
+      borderColor={postBorder}
+      p={5}
+      spacing={3}
+      w={[null, '100%', '90%', '80%', '70%', '60%']}
+      mx="auto"
+      align="flex-start"
+    >
+      <HStack spacing={5} w="100%">
+        <VStack alignSelf="flex-start">
+          <VoteButtons
+            voteStatus={post.vote_status}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+          />
+        </VStack>
+        <VStack align={'left'} w={'100%'} spacing={0} alignSelf={'flex-start'}>
+          <HStack>
+            <Text fontSize={'xs'}>
+              Posted by <b>{post.username}</b>
+            </Text>
+            <Timestamp createdAt={post.created_at} />
+          </HStack>
+
+          <Text fontWeight={'extrabold'} fontSize={'2xl'}>
+            {_.upperFirst(post.title)}
+          </Text>
+          {!isTitleOnlyPost ? content : null}
+        </VStack>
+      </HStack>
+      <HStack pt={5} fontWeight="bold" pl={'60px'} spacing={10}>
+        <HStack>
+          <MdOutlineModeComment color="#718096" size={'20px'} />
+          <CommentCount commentCount={post.comment_count} />
+        </HStack>
+      </HStack>
+    </VStack>
+  );
+};
