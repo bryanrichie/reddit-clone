@@ -18,6 +18,9 @@ export interface DatabasePost {
   updated_at: string;
   username: string;
   comment_count: string;
+  upvotes: string;
+  downvotes: string;
+  vote_status: boolean | null;
 }
 
 export interface CreateDatabasePostDto {
@@ -49,6 +52,30 @@ export interface AddCommentDto {
   comment: string;
 }
 
+export interface DatabasePostVote {
+  id: string;
+  postId: string;
+  userId: string;
+  vote: boolean | null;
+}
+
+export interface AddPostVoteDto {
+  postId: string;
+  userId: string;
+  vote: boolean;
+}
+
+export interface UpdatePostVoteDto {
+  postId: string;
+  userId: string;
+  vote: boolean;
+}
+
+export interface DeletePostVoteDto {
+  postId: string;
+  userId: string;
+}
+
 export class DatabaseService {
   pool: DatabasePool;
 
@@ -78,19 +105,19 @@ export class DatabaseService {
     });
   }
 
-  async updateUser(userId: string, user: DatabaseUser): Promise<DatabaseUser> {
-    const { email, username, password } = user;
+  // async updateUser(userId: string, user: DatabaseUser): Promise<DatabaseUser> {
+  //   const { email, username, password } = user;
 
-    const queryResult = await this.pool.connect(async (connection) => {
-      return connection.one<DatabaseUser>(
-        sql`UPDATE users
-            SET email = ${email}, username = ${username}, password_hash = ${password}, updated_at = now() 
-            WHERE id = ${userId}
-            RETURNING email, username, password_hash;`
-      );
-    });
-    return queryResult;
-  }
+  //   const queryResult = await this.pool.connect(async (connection) => {
+  //     return connection.one<DatabaseUser>(
+  //       sql`UPDATE users
+  //           SET email = ${email}, username = ${username}, password_hash = ${password}, updated_at = now()
+  //           WHERE id = ${userId}
+  //           RETURNING email, username, password_hash;`
+  //     );
+  //   });
+  //   return queryResult;
+  // }
 
   async validUser(username: string, password: string): Promise<Boolean> {
     return this.pool.connect((connection) => {
@@ -133,67 +160,62 @@ export class DatabaseService {
     });
   }
 
-  async deletePost(postId: string, userId: string): Promise<void> {
-    await this.pool.connect((connection) => {
-      return connection.one(
-        sql`DELETE FROM posts 
-            WHERE id = ${postId} AND user_id = ${userId}`
-      );
-    });
-  }
-
-  async editPost(postId: string, userPost: UpdateDatabasePostDto): Promise<DatabasePost> {
-    const { title, text, url } = userPost;
-
-    const queryResult = await this.pool.connect(async (connection) => {
-      const updateFragment = patch({
-        title,
-        text,
-        url,
-      });
-
-      return connection.one<DatabasePost>(
-        sql`UPDATE posts SET ${updateFragment}
-            WHERE "id" = ${postId} 
-            RETURNING *`
-      );
-    });
-    return queryResult;
-  }
-
-  async getPost(postId: string): Promise<DatabasePost> {
-    return this.pool.connect(async (connection) => {
-      return connection.one<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = ${postId})
-            FROM posts
-            INNER JOIN users
-            ON posts.user_id = users.id
-            WHERE posts.id = ${postId}`
-      );
-    });
-  }
-
-  // async getPosts(): Promise<readonly DatabasePost[]> {
-  //   return this.pool.connect(async (connection) => {
-  //     const { rows } = await connection.query<DatabasePost>(
-  //       sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username
-  //           FROM posts
-  //           INNER JOIN users ON posts.user_id = users.id`
+  // async deletePost(postId: string, userId: string): Promise<void> {
+  //   await this.pool.connect((connection) => {
+  //     return connection.one(
+  //       sql`DELETE FROM posts
+  //           WHERE id = ${postId} AND user_id = ${userId}`
   //     );
-
-  //     return rows;
   //   });
   // }
+
+  // async editPost(postId: string, userPost: UpdateDatabasePostDto): Promise<DatabasePost> {
+  //   const { title, text, url } = userPost;
+
+  //   const queryResult = await this.pool.connect(async (connection) => {
+  //     const updateFragment = patch({
+  //       title,
+  //       text,
+  //       url,
+  //     });
+
+  //     return connection.one<DatabasePost>(
+  //       sql`UPDATE posts SET ${updateFragment}
+  //           WHERE "id" = ${postId}
+  //           RETURNING *`
+  //     );
+  //   });
+  //   return queryResult;
+  // }
+
+  async getPost(post: Pick<DatabasePost, 'id' | 'userId'>): Promise<DatabasePost | null> {
+    const { id, userId } = post;
+
+    return this.pool.connect(async (connection) => {
+      return connection.maybeOne<DatabasePost>(
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
+            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = ${id}), 
+            (SELECT count(*) AS upvotes FROM user_post_votes WHERE user_post_votes.post_id = ${id} AND vote = True),
+            (SELECT count(*) AS downvotes FROM user_post_votes WHERE user_post_votes.post_id = ${id} AND vote = False),
+            (SELECT vote AS vote_status FROM user_post_votes WHERE user_post_votes.user_id = ${userId} AND user_post_votes.post_id = ${id} LIMIT 1)
+            FROM posts
+            INNER JOIN users ON posts.user_id = users.id
+            WHERE posts.id = ${id}`
+      );
+    });
+  }
 
   async getPosts(): Promise<readonly DatabasePost[]> {
     return this.pool.connect(async (connection) => {
       const { rows } = await connection.query<DatabasePost>(
         sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
-            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = posts.id)
+            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = posts.id),
+            (SELECT count(*) AS upvotes FROM user_post_votes WHERE user_post_votes.post_id = posts.id AND vote = True),
+            (SELECT count(*) AS downvotes FROM user_post_votes WHERE user_post_votes.post_id = posts.id AND vote = False),
+            (SELECT vote AS vote_status FROM user_post_votes WHERE user_post_votes.user_id = users.id AND user_post_votes.post_id = posts.id LIMIT 1)
             FROM posts
             INNER JOIN users ON posts.user_id = users.id`
       );
-
       return rows;
     });
   }
@@ -219,6 +241,39 @@ export class DatabaseService {
             WHERE posts.id = ${postId}`
       );
       return rows;
+    });
+  }
+
+  async addVote(postVote: AddPostVoteDto): Promise<void> {
+    const { userId, postId, vote } = postVote;
+
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabasePostVote>(
+        sql`INSERT INTO user_post_votes (user_id, post_id, vote)
+            VALUES (${userId}, ${postId}, ${vote})`
+      );
+    });
+  }
+
+  async updateVote(postVote: UpdatePostVoteDto): Promise<void> {
+    const { postId, userId, vote } = postVote;
+
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabasePostVote>(
+        sql`UPDATE user_post_votes SET vote = ${vote}
+            WHERE post_id = ${postId} AND user_id = ${userId}`
+      );
+    });
+  }
+
+  async deleteVote(postVote: DeletePostVoteDto): Promise<void> {
+    const { postId, userId } = postVote;
+
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabasePostVote>(
+        sql`DELETE FROM user_post_votes
+            WHERE post_id = ${postId} AND user_id = ${userId}`
+      );
     });
   }
 }

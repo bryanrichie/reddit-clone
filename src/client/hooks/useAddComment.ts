@@ -9,7 +9,7 @@ interface CommentVariables {
 }
 
 const addComment = async (variables: CommentVariables): Promise<void> => {
-  const { data } = await axios(`http://localhost:8080/posts/${variables.postId}/comments`, {
+  const { data } = await axios(`http://localhost:8080/posts/${variables.postId}/comments/add`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${variables.token}`,

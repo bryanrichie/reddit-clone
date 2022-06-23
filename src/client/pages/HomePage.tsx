@@ -11,10 +11,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import _ from 'lodash';
-import React from 'react';
-import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
+import { MdOutlineModeComment } from 'react-icons/md';
 import { Link as ReactRouterLink } from 'react-router-dom';
+import { CommentCount } from '../components/CommentCount';
 import { NavBar } from '../components/NavBar';
+import { Timestamp } from '../components/Timestamp';
+import { VoteButtons } from '../components/VoteButtons';
 import { useGetPosts } from '../hooks/useGetPosts';
 
 export const HomePage = () => {
@@ -29,40 +31,11 @@ export const HomePage = () => {
   );
 
   const posts = _.map(data, (post) => {
-    const timeNow = Date.now();
-    const postTime = _.toInteger(post.created_at);
-    const age = Math.abs(timeNow - postTime) / 1000;
-    const days = Math.floor(age / 86000);
-    const hours = Math.floor(age / 3600) % 24;
-    const minutes = Math.floor(age / 60) % 60;
-    const seconds = Math.floor(age % 60);
-
-    const postAge = () => {
-      if (days <= 0 && hours <= 0 && minutes <= 0) {
-        return `${seconds} seconds`;
-      } else if (days <= 0 && hours <= 0) {
-        return `${minutes} minutes`;
-      } else if (days <= 0) {
-        return `${hours} hours`;
-      } else {
-        return `${days} days`;
-      }
-    };
-
-    const commentCount = () => {
-      if (_.toNumber(post.comment_count) < 1) {
-        return <Text color={'gray.500'}>Comment</Text>;
-      } else if (_.toNumber(post.comment_count) == 1) {
-        return <Text color={'gray.500'}>{post.comment_count} Comment</Text>;
-      }
-      return <Text color={'gray.500'}>{post.comment_count} Comments</Text>;
-    };
-
     const isTitleOnlyPost = !post.text && !post.url;
     const content =
       post.text && !post.url ? (
         <Text
-          pt={3}
+          pb={2}
           maxH={'300px'}
           overflow="hidden"
           position={'relative'}
@@ -80,7 +53,7 @@ export const HomePage = () => {
         </Text>
       ) : (
         <Image
-          pt={3}
+          pb={2}
           alignSelf={'center'}
           maxH={'300px'}
           objectFit={'cover'}
@@ -89,49 +62,50 @@ export const HomePage = () => {
       );
 
     return (
-      <Link
-        as={ReactRouterLink}
-        to={`/post/${post.id}`}
+      <ListItem
         key={post.id}
-        _hover={{ textDecoration: 'none' }}
-        _focus={{ boxShadow: 0 }}
-        p={5}
+        listStyleType={'none'}
+        borderRadius="md"
+        bg={postBg}
+        border="1px"
+        borderColor={postBorder}
+        p={2}
+        minH="120px"
       >
-        <ListItem
-          listStyleType={'none'}
-          borderRadius="md"
-          bg={postBg}
-          border="1px"
-          borderColor={postBorder}
-          p={5}
-        >
-          <HStack justify={'space-between'} spacing={5}>
-            <VStack alignSelf="flex-start">
-              <MdArrowCircleUp size={'40px'} />
-              <Text>0</Text>
-              <MdArrowCircleDown size={'40px'} />
-            </VStack>
-            <VStack align={'left'} w={'100%'} spacing={0} alignSelf={'flex-start'}>
+        <HStack spacing={2} align="flex-start" h="100%">
+          <VoteButtons
+            postId={post.id}
+            voteStatus={post.vote_status}
+            upvotes={post.upvotes}
+            downvotes={post.downvotes}
+          />
+          <Link
+            w="100%"
+            minH="120px"
+            as={ReactRouterLink}
+            to={`/post/${post.id}`}
+            _hover={{ textDecoration: 'none' }}
+            _focus={{ boxShadow: 0 }}
+          >
+            <VStack align="left" spacing={0} minH="120px">
               <HStack>
                 <Text fontSize={'xs'}>
                   Posted by <b>{post.username}</b>
                 </Text>
-                <Text fontSize={'xs'}>{postAge()} ago</Text>
+                <Timestamp createdAt={post.created_at} />
               </HStack>
               <Text fontWeight={'extrabold'} fontSize={'2xl'}>
                 {_.upperFirst(post.title)}
               </Text>
               {!isTitleOnlyPost ? content : null}
             </VStack>
-          </HStack>
-          <HStack pt={5} fontWeight="bold" ml={'60px'} spacing={10}>
-            <HStack>
+            <HStack fontWeight="bold">
               <MdOutlineModeComment color="#718096" size={'20px'} />
-              {commentCount()}
+              <CommentCount commentCount={post.comment_count} />
             </HStack>
-          </HStack>
-        </ListItem>
-      </Link>
+          </Link>
+        </HStack>
+      </ListItem>
     );
   });
 
