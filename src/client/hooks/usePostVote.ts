@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
+import { getPostsQueryKey } from './useGetPosts';
 import { getPostQueryKey } from './useGetSinglePost';
 
 interface AddPostVoteVariables {
@@ -36,6 +37,7 @@ export const useAddPostVote = (postId: string) => {
   return useMutation<void, Error, AddPostVoteVariables>(addPostVote, {
     onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries(getPostQueryKey(postId));
+      await queryClient.invalidateQueries(getPostsQueryKey());
     },
   });
 };
@@ -57,6 +59,7 @@ export const useUpdatePostVote = (postId: string) => {
   return useMutation<void, Error, UpdatePostVoteVariables>(updatePostVote, {
     onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries(getPostQueryKey(postId));
+      await queryClient.invalidateQueries(getPostsQueryKey());
     },
   });
 };
@@ -78,6 +81,7 @@ export const useDeletePostVote = (postId: string) => {
   return useMutation<void, Error, DeletePostVoteVariables>(deletePostVote, {
     onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries(getPostQueryKey(postId));
+      await queryClient.invalidateQueries(getPostsQueryKey());
     },
   });
 };
