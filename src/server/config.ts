@@ -4,7 +4,7 @@ config();
 
 export interface Config {
   databaseUrl: string;
-  isProduction: string;
+  isProduction: boolean;
   jwtSecret: string;
 }
 
@@ -21,7 +21,7 @@ export const getEnv = (value: string) => {
 export const fromEnv = (): Config => {
   return {
     databaseUrl: getEnv('DATABASE_URL'),
-    isProduction: getEnv('NPM_CONFIG_PRODUCTION'),
+    isProduction: getEnv('NODE_ENV') === 'production',
     jwtSecret: getEnv('JWT_SECRET'),
   };
 };

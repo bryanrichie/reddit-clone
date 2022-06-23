@@ -60,6 +60,7 @@ export const UrlPostForm = () => {
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputBorder}
           bg={'white'}
+          color="black"
         />
         <Input
           {...register('url')}
@@ -68,6 +69,7 @@ export const UrlPostForm = () => {
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputBorder}
           bg={'white'}
+          color="black"
         />
         <Input
           type="submit"

@@ -39,12 +39,12 @@ export class UserService {
     return this.databaseService.getPartialUser(username);
   }
 
-  updateUser(
-    userId: string,
-    email: string,
-    username: string,
-    password: string
-  ): Promise<DatabaseUser> {
-    return this.databaseService.updateUser(userId, { email, username, password });
-  }
+  // updateUser(
+  //   userId: string,
+  //   email: string,
+  //   username: string,
+  //   password: string
+  // ): Promise<DatabaseUser> {
+  //   return this.databaseService.updateUser(userId, { email, username, password });
+  // }
 }

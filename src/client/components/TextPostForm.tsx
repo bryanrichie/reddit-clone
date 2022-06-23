@@ -68,6 +68,7 @@ export const TextPostForm = () => {
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputBorder}
           bg={'white'}
+          color="black"
         />
         <Textarea
           {...register('text')}
@@ -77,6 +78,7 @@ export const TextPostForm = () => {
           focusBorderColor={inputBorder}
           bg={'white'}
           h={250}
+          color="black"
         />
         <Input
           type="submit"
