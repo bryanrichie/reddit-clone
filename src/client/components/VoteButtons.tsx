@@ -1,43 +1,41 @@
-import { IconButton } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { IconButton, VStack } from '@chakra-ui/react';
+import React from 'react';
 import { MdArrowCircleDown, MdArrowCircleUp } from 'react-icons/md';
-import { DatabasePost } from '../../server/services/database.service';
 import { useAuthContext } from '../context/AuthContext';
 import { useAddPostVote, useDeletePostVote, useUpdatePostVote } from '../hooks/usePostVote';
-import { useRequiredParams } from '../utils/useRequiredParams';
 import { VoteCount } from './VoteCount';
 
 interface Props {
+  postId: string;
   voteStatus: boolean | null;
   upvotes: string;
   downvotes: string;
 }
 
 export const VoteButtons = (props: Props) => {
-  const { postId } = useRequiredParams<{ postId: string }>();
   const { authToken } = useAuthContext();
-  const addVoteMutation = useAddPostVote(postId);
-  const updateVoteMutation = useUpdatePostVote(postId);
-  const deleteVoteMutation = useDeletePostVote(postId);
+  const addVoteMutation = useAddPostVote(props.postId);
+  const updateVoteMutation = useUpdatePostVote(props.postId);
+  const deleteVoteMutation = useDeletePostVote(props.postId);
 
   const onUpvote = React.useCallback(() => {
     if (authToken && props.voteStatus == null) {
       const request = {
-        postId,
+        postId: props.postId,
         vote: true,
       };
 
       return addVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
     } else if (authToken && props.voteStatus == false) {
       const request = {
-        postId,
+        postId: props.postId,
         vote: true,
       };
 
       return updateVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
     } else if (authToken && props.voteStatus == true) {
       const request = {
-        postId,
+        postId: props.postId,
       };
 
       return deleteVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
@@ -47,21 +45,21 @@ export const VoteButtons = (props: Props) => {
   const onDownvote = React.useCallback(() => {
     if (authToken && props.voteStatus == null) {
       const request = {
-        postId,
+        postId: props.postId,
         vote: false,
       };
 
       return addVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
     } else if (authToken && props.voteStatus == true) {
       const request = {
-        postId,
+        postId: props.postId,
         vote: false,
       };
 
       return updateVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
     } else if (authToken && props.voteStatus == false) {
       const request = {
-        postId,
+        postId: props.postId,
       };
 
       return deleteVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
@@ -69,7 +67,7 @@ export const VoteButtons = (props: Props) => {
   }, [addVoteMutation, updateVoteMutation, deleteVoteMutation]);
 
   return (
-    <>
+    <VStack alignSelf="flex-start">
       <IconButton
         aria-label="Upvote"
         variant={'outline'}
@@ -93,6 +91,6 @@ export const VoteButtons = (props: Props) => {
         icon={<MdArrowCircleDown size={'40px'} />}
         onClick={() => onDownvote()}
       />
-    </>
+    </VStack>
   );
 };

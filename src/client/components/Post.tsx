@@ -1,14 +1,10 @@
-import { HStack, IconButton, Image, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { HStack, Image, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 import _ from 'lodash';
-import React from 'react';
-import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
+import { MdOutlineModeComment } from 'react-icons/md';
 import { DatabasePost } from '../../server/services/database.service';
 import { Timestamp } from '../components/Timestamp';
-import { useAuthContext } from '../context/AuthContext';
-import { useAddPostVote } from '../hooks/usePostVote';
 import { CommentCount } from './CommentCount';
 import { VoteButtons } from './VoteButtons';
-import { VoteCount } from './VoteCount';
 
 interface Props {
   postId: string;
@@ -24,9 +20,9 @@ export const Post = (props: Props) => {
   const isTitleOnlyPost = !post.text && !post.url;
   const content =
     post.text && !post.url ? (
-      <Text pt={3}>{post.text}</Text>
+      <Text pb={2}>{post.text}</Text>
     ) : (
-      <Image pt={3} alignSelf={'center'} maxH={'300px'} objectFit={'cover'} src={post.url ?? ''} />
+      <Image pb={2} alignSelf={'center'} maxH={'300px'} objectFit={'cover'} src={post.url ?? ''} />
     );
 
   return (
@@ -36,39 +32,35 @@ export const Post = (props: Props) => {
       bg={postBg}
       border="1px"
       borderColor={postBorder}
-      p={5}
-      spacing={3}
+      p={2}
       w={[null, '100%', '90%', '80%', '70%', '60%']}
       mx="auto"
+      minH="150px"
       align="flex-start"
     >
-      <HStack spacing={5} w="100%">
-        <VStack alignSelf="flex-start">
-          <VoteButtons
-            voteStatus={post.vote_status}
-            upvotes={post.upvotes}
-            downvotes={post.downvotes}
-          />
-        </VStack>
-        <VStack align={'left'} w={'100%'} spacing={0} alignSelf={'flex-start'}>
+      <HStack spacing={2} align="flex-start" w="100%">
+        <VoteButtons
+          postId={postId}
+          voteStatus={post.vote_status}
+          upvotes={post.upvotes}
+          downvotes={post.downvotes}
+        />
+        <VStack align={'left'} w={'100%'} spacing={0}>
           <HStack>
             <Text fontSize={'xs'}>
               Posted by <b>{post.username}</b>
             </Text>
             <Timestamp createdAt={post.created_at} />
           </HStack>
-
           <Text fontWeight={'extrabold'} fontSize={'2xl'}>
             {_.upperFirst(post.title)}
           </Text>
           {!isTitleOnlyPost ? content : null}
         </VStack>
       </HStack>
-      <HStack pt={5} fontWeight="bold" pl={'60px'} spacing={10}>
-        <HStack>
-          <MdOutlineModeComment color="#718096" size={'20px'} />
-          <CommentCount commentCount={post.comment_count} />
-        </HStack>
+      <HStack fontWeight="bold" pl={'50px'} w="100%">
+        <MdOutlineModeComment color="#718096" size={'20px'} />
+        <CommentCount commentCount={post.comment_count} />
       </HStack>
     </VStack>
   );
