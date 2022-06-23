@@ -1,4 +1,4 @@
-import { IconButton, VStack } from '@chakra-ui/react';
+import { IconButton, useColorModeValue, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { MdArrowCircleDown, MdArrowCircleUp } from 'react-icons/md';
 import { useAuthContext } from '../context/AuthContext';
@@ -17,6 +17,9 @@ export const VoteButtons = (props: Props) => {
   const addVoteMutation = useAddPostVote(props.postId);
   const updateVoteMutation = useUpdatePostVote(props.postId);
   const deleteVoteMutation = useDeletePostVote(props.postId);
+  const voteButtonHoverBg = useColorModeValue('gray.100', 'gray.600');
+  const upvoteButtonColorScheme = useColorModeValue('green', 'teal');
+  const downvoteButtonColorScheme = useColorModeValue('red', 'red');
 
   const onUpvote = React.useCallback(() => {
     if (authToken && props.voteStatus == null) {
@@ -71,10 +74,10 @@ export const VoteButtons = (props: Props) => {
       <IconButton
         aria-label="Upvote"
         variant={'outline'}
-        colorScheme={props.voteStatus === true ? 'teal' : 'black'}
+        colorScheme={props.voteStatus === true ? upvoteButtonColorScheme : 'black'}
         border="none"
         _focus={{ boxShadow: '0' }}
-        _hover={{ bg: 'gray.100' }}
+        _hover={{ bg: voteButtonHoverBg }}
         _active={{ bg: 'none' }}
         icon={<MdArrowCircleUp size={'40px'} />}
         onClick={() => onUpvote()}
@@ -83,10 +86,10 @@ export const VoteButtons = (props: Props) => {
       <IconButton
         aria-label="Downvote"
         variant={'outline'}
-        colorScheme={props.voteStatus === false ? 'red' : 'black'}
+        colorScheme={props.voteStatus === false ? downvoteButtonColorScheme : 'black'}
         border="none"
         _focus={{ boxShadow: '0' }}
-        _hover={{ bg: 'gray.100' }}
+        _hover={{ bg: voteButtonHoverBg }}
         _active={{ bg: 'none' }}
         icon={<MdArrowCircleDown size={'40px'} />}
         onClick={() => onDownvote()}
