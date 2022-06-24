@@ -9,6 +9,7 @@ export const errorMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(error);
   if (!isCustomError(error)) {
     error = new CustomError({
       type: CustomErrors.InternalServerError,

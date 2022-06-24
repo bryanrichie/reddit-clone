@@ -2,10 +2,11 @@ import axios from 'axios';
 import _ from 'lodash';
 import { useQuery } from 'react-query';
 import { DatabasePost } from '../../server/services/database.service';
+import { apiUrl } from '../constants';
 import { useAuthContext } from '../context/AuthContext';
 
 const getSinglePost = async (postId: string, token?: string): Promise<DatabasePost> => {
-  const { data } = await axios(`http://localhost:8080/post/${postId}`, {
+  const { data } = await axios(`${apiUrl}/post/${postId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token ?? ''}`,

@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { DatabaseComment } from '../../server/services/database.service';
+import { apiUrl } from '../constants';
 import { useAuthContext } from '../context/AuthContext';
 
 const getComments = async (postId: string, token?: string): Promise<readonly DatabaseComment[]> => {
-  const { data } = await axios(`http://localhost:8080/posts/${postId}/comments`, {
+  const { data } = await axios(`${apiUrl}/posts/${postId}/comments`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token ?? ''}`,

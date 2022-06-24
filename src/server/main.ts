@@ -10,21 +10,18 @@ import { errorMiddleware } from './middleware/error.middleware';
 import { DatabaseService } from './services/database.service';
 import { PostService } from './services/post.service';
 import { UserService } from './services/user.service';
+import history from 'connect-history-api-fallback';
 
 const config: Config = fromEnv();
 
 const app = express();
-const port = process.env.PORT || 8080;
 
-const pool = createPool(process.env.DATABASE_URL ?? '');
+const pool = createPool(config.databaseUrl, { ssl: { rejectUnauthorized: false } });
 const databaseService = new DatabaseService(pool);
 const userService = new UserService(databaseService);
 const postService = new PostService(databaseService);
 
-if (config.isProduction) {
-  const p = path.join(__dirname, '../client');
-  app.use(express.static(p));
-}
+app.use(history());
 
 app.use(cors());
 app.use(express.json());
@@ -220,6 +217,11 @@ app.post('/posts/:postId/votes/delete', authMiddleware, async (req: Request, res
 
 app.use(errorMiddleware);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+if (config.isProduction) {
+  const p = path.join(__dirname, '../client');
+  app.use(express.static(p));
+}
+
+app.listen(config.port, () => {
+  console.log(`Example app listening on port ${config.port}`);
 });

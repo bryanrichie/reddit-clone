@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
+import { apiUrl } from '../constants';
 import { getPostsQueryKey } from './useGetPosts';
 
 interface TextPostVariables {
@@ -36,7 +37,7 @@ export const useCreateTextPost = () => {
 };
 
 const createUrlPost = async (variables: UrlPostVariables): Promise<void> => {
-  const { data } = await axios('http://localhost:8080/post/create', {
+  const { data } = await axios(`${apiUrl}/post/create`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${variables.token}`,

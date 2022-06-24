@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
+import { apiUrl } from '../constants';
 import { getCommentsQueryKey } from './useGetComments';
 
 interface CommentVariables {
@@ -9,7 +10,7 @@ interface CommentVariables {
 }
 
 const addComment = async (variables: CommentVariables): Promise<void> => {
-  const { data } = await axios(`http://localhost:8080/posts/${variables.postId}/comments/add`, {
+  const { data } = await axios(`${apiUrl}/posts/${variables.postId}/comments/add`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${variables.token}`,

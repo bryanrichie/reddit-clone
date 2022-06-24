@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useMutation } from 'react-query';
+import { apiUrl } from '../constants';
 
 interface UserVariables {
   email: string;
@@ -10,7 +11,7 @@ interface UserVariables {
 type jwt = string;
 
 const postRegisterUser = async (variables: UserVariables): Promise<jwt> => {
-  const { data } = await axios.post('http://localhost:8080/register', variables);
+  const { data } = await axios.post(`${apiUrl}/register`, variables);
   return data;
 };
 

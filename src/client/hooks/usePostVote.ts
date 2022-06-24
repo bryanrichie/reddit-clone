@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
+import { apiUrl } from '../constants';
 import { getPostsQueryKey } from './useGetPosts';
 import { getPostQueryKey } from './useGetSinglePost';
 
@@ -65,7 +66,7 @@ export const useUpdatePostVote = (postId: string) => {
 };
 
 const deletePostVote = async (variables: DeletePostVoteVariables): Promise<void> => {
-  const { data } = await axios(`http://localhost:8080/posts/${variables.postId}/votes/delete`, {
+  const { data } = await axios(`${apiUrl}/posts/${variables.postId}/votes/delete`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${variables.token}`,
