@@ -35,6 +35,7 @@
     "react-query": "^3.39.0",
     "react-router-dom": "^6.3.0",
     "react-use": "^17.3.2",
+    "serve": "^13.0.2",
     "slonik": "^28.1.0",
     "yup": "^0.32.11"
   },

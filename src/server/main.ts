@@ -21,6 +21,11 @@ const databaseService = new DatabaseService(pool);
 const userService = new UserService(databaseService);
 const postService = new PostService(databaseService);
 
+if (config.isProduction) {
+  const p = path.join(__dirname, '../client');
+  app.use(express.static(p));
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -214,10 +219,6 @@ app.post('/posts/:postId/votes/delete', authMiddleware, async (req: Request, res
 });
 
 app.use(errorMiddleware);
-
-if (config.isProduction) {
-  app.use(express.static(path.join(__dirname, '../client')));
-}
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
