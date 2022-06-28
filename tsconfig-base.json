@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "declarationMap": true,
+    "target": "es2019",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "composite": true,
+    "strict": true,
+    "useUnknownInCatchVariables": false,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "paths": {
+      "reddit-clone-client": ["packages/reddit-clone-client/src"],
+      "reddit-clone-server": ["packages/reddit-clone-server/src"]
+    }
+  },
+  "exclude": ["**/node_modules", "**/dist"]
+}
