@@ -2,55 +2,18 @@
   "name": "reddit-clone",
   "private": true,
   "version": "0.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "clean": "rimraf -rf ./dist",
-    "start": "node dist/src/server/main.js",
-    "client:dev": "vite -f dev",
-    "client:build": "vite build",
-    "server:dev": "ts-node-dev --respawn --transpile-only src/server/main.ts",
-    "server:build": "tsc",
-    "build": "run-s clean server:build client:build",
-    "dev": "docker-compose up -d && run-p server:dev client:dev",
-    "db:cli": "pgcli postgresql://postgres:pass@localhost:5433/reddit-clone",
-    "db:restart": "docker-compose rm pg && docker-compose up"
-  },
-  "dependencies": {
-    "@chakra-ui/icons": "^2.0.0",
-    "@chakra-ui/react": "^1.8.8",
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
-    "@hookform/resolvers": "^2.8.8",
-    "axios": "^0.27.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.3",
-    "framer-motion": "^6",
-    "jsonwebtoken": "^8.5.1",
-    "jwt-decode": "^3.1.2",
-    "pg": "^8.7.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-hook-form": "^7.31.1",
-    "react-icons": "^4.3.1",
-    "react-query": "^3.39.0",
-    "react-router-dom": "^6.3.0",
-    "react-use": "^17.3.2",
-    "serve": "^13.0.2",
-    "slonik": "^28.1.0",
-    "yup": "^0.32.11"
+    "clean": "yarn lerna run --parallel clean",
+    "start": "yarn lerna run --parallel start",
+    "build": "yarn lerna run --parallel build",
+    "dev": "docker-compose up -d && yarn lerna run --parallel dev",
+    "db:cli": "yarn workspace reddit-clone-server db:cli",
+    "db:restart": "yarn workspace reddit-clone-server db:restart"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.12",
-    "@types/express": "^4.17.13",
-    "@types/jsonwebtoken": "^8.5.8",
-    "@types/node": "^17.0.23",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.2",
-    "@vitejs/plugin-react": "^1.0.7",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^3.0.2",
-    "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.4",
-    "vite": "^2.9.0"
+    "lerna": "^5.1.5"
   }
 }
