@@ -44,9 +44,7 @@ export const CommentsForm = () => {
           postId: (postId as string) ?? '',
           comment: data.comment,
         };
-        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
-          window.location.reload();
-        });
+        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
       }
     },
     [addCommentMutation]
@@ -63,6 +61,7 @@ export const CommentsForm = () => {
           focusBorderColor={inputBorder}
           borderRadius="0"
           bg={'white'}
+          color="black"
           borderColor="gray"
           h={150}
           w={[300, 500, 650, 750, 900]}

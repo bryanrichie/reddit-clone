@@ -15,9 +15,9 @@ export const LoginPage = () => {
             <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
               Register
             </Tab>
-            <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
+            {/* <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
               Forgot Password
-            </Tab>
+            </Tab> */}
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -26,7 +26,7 @@ export const LoginPage = () => {
             <TabPanel>
               <RegisterForm />
             </TabPanel>
-            <TabPanel></TabPanel>
+            {/* <TabPanel></TabPanel> */}
           </TabPanels>
         </Tabs>
       </Box>

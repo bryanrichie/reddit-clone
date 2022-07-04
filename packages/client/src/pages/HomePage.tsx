@@ -1,4 +1,6 @@
 import {
+  AspectRatio,
+  Box,
   Flex,
   HStack,
   Image,
@@ -33,6 +35,27 @@ export const HomePage = () => {
 
   const posts = _.map(data, (post) => {
     const isTitleOnlyPost = !post.text && !post.url;
+    const urlCheck = () => {
+      if (_.includes(post.url, 'youtube')) {
+        return (
+          <AspectRatio maxW="300px" ratio={16 / 9}>
+            <iframe src={_.replace(post.url ?? '', 'watch?v=', 'embed/')} allowFullScreen />
+          </AspectRatio>
+        );
+      }
+      if (_.includes(post.url, 'youtu.be')) {
+        return (
+          <AspectRatio maxW="300px" ratio={16 / 9}>
+            <iframe
+              src={_.replace(post.url ?? '', 'youtu.be', 'youtube.com/embed/')}
+              allowFullScreen
+            />
+          </AspectRatio>
+        );
+      }
+      return <Image alignSelf={'center'} maxH={'300px'} objectFit={'cover'} src={post.url ?? ''} />;
+    };
+
     const content =
       post.text && !post.url ? (
         <Text
@@ -53,13 +76,7 @@ export const HomePage = () => {
           {post.text}
         </Text>
       ) : (
-        <Image
-          pb={2}
-          alignSelf={'center'}
-          maxH={'300px'}
-          objectFit={'cover'}
-          src={post.url ?? ''}
-        />
+        urlCheck()
       );
 
     return (
@@ -73,7 +90,7 @@ export const HomePage = () => {
         p={2}
         minH="120px"
       >
-        <HStack spacing={2} align="flex-start" h="100%">
+        <HStack spacing={2} align="flex-start" h="100%" pr={2}>
           <VoteButtons
             postId={post.id}
             voteStatus={post.vote_status}
@@ -100,7 +117,7 @@ export const HomePage = () => {
               </Text>
               {!isTitleOnlyPost ? content : null}
             </VStack>
-            <HStack fontWeight="bold">
+            <HStack fontWeight="bold" mt={2}>
               <MdOutlineModeComment color="#718096" size={'20px'} />
               <CommentCount commentCount={post.comment_count} />
             </HStack>

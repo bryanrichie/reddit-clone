@@ -1,6 +1,5 @@
 import { DatabasePool, sql } from 'slonik';
-import { User } from '../types';
-import { patch } from './utils';
+import { Post, User } from '../types';
 
 export interface DatabaseUser {
   email: string;
@@ -149,16 +148,32 @@ export class DatabaseService {
     });
   }
 
-  async createPost(userPost: CreateDatabasePostDto): Promise<void> {
+  // async createPost(userPost: CreateDatabasePostDto): Promise<void> {
+  //   const { userId, title, text, url } = userPost;
+
+  //   await this.pool.connect(async (connection) => {
+  //     const { rows } = await connection.query<DatabasePost>(
+  //       sql`INSERT INTO posts (user_id, title, text, url)
+  //           VALUES (${userId}, ${title}, ${text}, ${url})
+  //           RETURNING id`
+  //     );
+  //     return rows;
+  //   });
+  // }
+
+  async createPost(userPost: CreateDatabasePostDto): Promise<Post> {
     const { userId, title, text, url } = userPost;
 
-    await this.pool.connect(async (connection) => {
-      return connection.query<DatabasePost>(
+    return this.pool.connect((connection) => {
+      return connection.one<DatabasePost>(
         sql`INSERT INTO posts (user_id, title, text, url) 
-            VALUES (${userId}, ${title}, ${text}, ${url})`
+            VALUES (${userId}, ${title}, ${text}, ${url})
+            RETURNING id`
       );
     });
   }
+
+  // async createPost(userPost: CreateDatabasePostDto): Promise
 
   // async deletePost(postId: string, userId: string): Promise<void> {
   //   await this.pool.connect((connection) => {

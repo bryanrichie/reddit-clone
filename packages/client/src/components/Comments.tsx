@@ -1,4 +1,4 @@
-import { Flex, HStack, ListItem, Text, UnorderedList, VStack } from '@chakra-ui/react';
+import { Flex, HStack, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react';
 import _ from 'lodash';
 import React from 'react';
 import { VscCommentDiscussion } from 'react-icons/vsc';
@@ -53,6 +53,10 @@ export const Comments = () => {
       <Text>Be the first to leave one</Text>
     </VStack>
   );
+
+  if (isLoading) {
+    return <Spinner size="xl" alignSelf={'center'} />;
+  }
 
   return (
     <Flex borderTopWidth={1} borderTopColor="gray" w="100%">

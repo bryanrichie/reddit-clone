@@ -1,3 +1,4 @@
+import { Post } from '../types';
 import {
   AddCommentDto,
   AddPostVoteDto,
@@ -18,7 +19,7 @@ export class PostService {
     this.databaseService = databaseService;
   }
 
-  createPost(post: CreateDatabasePostDto): Promise<void> {
+  createPost(post: CreateDatabasePostDto): Promise<Post> {
     return this.databaseService.createPost(post);
   }
 
