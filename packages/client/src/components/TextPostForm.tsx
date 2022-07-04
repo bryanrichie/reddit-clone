@@ -1,4 +1,4 @@
-import { Input, Textarea, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Input, Textarea, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import _ from 'lodash';
 import React from 'react';
@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAuth } from '../hooks/useAuth';
 import { useCreateTextPost } from '../hooks/useCreatePost';
+
+interface Props {
+  onClose: () => void;
+}
 
 interface FormValues {
   title: string;
@@ -20,7 +24,9 @@ const validationSchema = yup
   })
   .required();
 
-export const TextPostForm = () => {
+export const TextPostForm = (props: Props) => {
+  const { onClose } = props;
+  // const { onClose } = useDisclosure();
   const createPostMutation = useCreateTextPost();
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
@@ -47,9 +53,7 @@ export const TextPostForm = () => {
           text: !_.isEmpty(data.text) ? data.text : null,
         };
         return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
-          if (window.location.pathname == '/') {
-            window.location.reload();
-          }
+          onClose();
           navigate('/', { replace: true });
         });
       }

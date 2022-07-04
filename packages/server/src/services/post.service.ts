@@ -30,8 +30,8 @@ export class PostService {
   //   return this.databaseService.editPost(postId, post);
   // }
 
-  getPosts(): Promise<readonly DatabasePost[]> {
-    return this.databaseService.getPosts();
+  getPosts(userId: string): Promise<readonly DatabasePost[]> {
+    return this.databaseService.getPosts(userId);
   }
 
   getPost(post: Pick<DatabasePost, 'id' | 'userId'>): Promise<DatabasePost | null> {

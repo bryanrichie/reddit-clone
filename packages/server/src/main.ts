@@ -36,7 +36,7 @@ app.use(express.json());
 
 app.get('/', authMiddleware, async (req: Request, res, next) => {
   try {
-    const posts = await postService.getPosts();
+    const posts = await postService.getPosts(req.user.id);
 
     res.status(200).json(posts);
   } catch (error) {

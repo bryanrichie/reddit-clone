@@ -188,6 +188,22 @@ export class DatabaseService {
   //   return queryResult;
   // }
 
+  async getPosts(userId: string): Promise<readonly DatabasePost[]> {
+    return this.pool.connect(async (connection) => {
+      const { rows } = await connection.query<DatabasePost>(
+        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
+            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = posts.id),
+            (SELECT count(*) AS upvotes FROM user_post_votes WHERE user_post_votes.post_id = posts.id AND vote = True),
+            (SELECT count(*) AS downvotes FROM user_post_votes WHERE user_post_votes.post_id = posts.id AND vote = False),
+            (SELECT vote AS vote_status FROM user_post_votes WHERE user_post_votes.user_id = ${userId} AND user_post_votes.post_id = posts.id LIMIT 1)
+            FROM posts
+            INNER JOIN users ON posts.user_id = users.id
+            ORDER BY posts.created_at DESC`
+      );
+      return rows;
+    });
+  }
+
   async getPost(post: Pick<DatabasePost, 'id' | 'userId'>): Promise<DatabasePost | null> {
     const { id, userId } = post;
 
@@ -202,21 +218,6 @@ export class DatabaseService {
             INNER JOIN users ON posts.user_id = users.id
             WHERE posts.id = ${id}`
       );
-    });
-  }
-
-  async getPosts(): Promise<readonly DatabasePost[]> {
-    return this.pool.connect(async (connection) => {
-      const { rows } = await connection.query<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
-            (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = posts.id),
-            (SELECT count(*) AS upvotes FROM user_post_votes WHERE user_post_votes.post_id = posts.id AND vote = True),
-            (SELECT count(*) AS downvotes FROM user_post_votes WHERE user_post_votes.post_id = posts.id AND vote = False),
-            (SELECT vote AS vote_status FROM user_post_votes WHERE user_post_votes.user_id = users.id AND user_post_votes.post_id = posts.id LIMIT 1)
-            FROM posts
-            INNER JOIN users ON posts.user_id = users.id`
-      );
-      return rows;
     });
   }
 

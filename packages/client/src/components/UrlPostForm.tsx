@@ -7,6 +7,10 @@ import * as yup from 'yup';
 import { useAuth } from '../hooks/useAuth';
 import { useCreateUrlPost } from '../hooks/useCreatePost';
 
+interface Props {
+  onClose: () => void;
+}
+
 interface FormValues {
   title: string;
   url: string;
@@ -19,7 +23,8 @@ const validationSchema = yup
   })
   .required();
 
-export const UrlPostForm = () => {
+export const UrlPostForm = (props: Props) => {
+  const { onClose } = props;
   const createPostMutation = useCreateUrlPost();
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
@@ -41,9 +46,7 @@ export const UrlPostForm = () => {
   const onSubmit = (data: FormValues) => {
     if (authToken) {
       return createPostMutation.mutateAsync({ ...data, token: authToken }).then((res) => {
-        if (window.location.pathname == '/') {
-          window.location.reload();
-        }
+        onClose();
         navigate('/', { replace: true });
       });
     }
