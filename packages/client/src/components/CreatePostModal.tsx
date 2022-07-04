@@ -82,10 +82,10 @@ export const CreatePostModal = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <TextPostForm />
+                  <TextPostForm onClose={onClose} />
                 </TabPanel>
                 <TabPanel>
-                  <UrlPostForm />
+                  <UrlPostForm onClose={onClose} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
