@@ -15,8 +15,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
-import { TextPostForm } from './TextPostForm';
-import { UrlPostForm } from './UrlPostForm';
+import { TextPostForm } from './forms/TextPostForm';
+import { UrlPostForm } from './forms/UrlPostForm';
 
 export const CreatePostModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

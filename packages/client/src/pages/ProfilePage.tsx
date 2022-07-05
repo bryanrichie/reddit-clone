@@ -1,50 +1,15 @@
-import {
-  Flex,
-  useColorModeValue,
-  VStack,
-  Text,
-  HStack,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalHeader,
-  ModalBody,
-} from '@chakra-ui/react';
+import { Flex, HStack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import decode from 'jwt-decode';
 import React from 'react';
-
+import { useLocalStorage } from 'react-use';
 import { NavBar } from '../components/NavBar';
-import { PasswordChangeModal } from '../components/PasswordChangeModal';
+import { JwtToken } from '../types';
 
 export const ProfilePage = () => {
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
   const settingsBg = useColorModeValue('white', 'gray.700');
-  const changeFont = useColorModeValue('blue.800', 'blue.100');
-  const changeHoverFont = useColorModeValue('white', 'blue.700');
-  const changeHoverBg = useColorModeValue('blue.800', 'blue.100');
-
-  const changeButton = () => {
-    return (
-      <Button
-        alignSelf={'flex-end'}
-        w={100}
-        mt={-5}
-        mr={4}
-        borderRadius={50}
-        color={changeFont}
-        bg={'transparent'}
-        fontWeight="bold"
-        borderWidth={'medium'}
-        borderColor={changeFont}
-        _hover={{ color: changeHoverFont, bg: changeHoverBg }}
-        _focus={{ boxShadow: 0 }}
-        _active={{ color: changeHoverFont, bg: changeHoverBg }}
-      >
-        Change
-      </Button>
-    );
-  };
+  const [token] = useLocalStorage<string | undefined>('auth');
+  const profileDetails = decode<JwtToken>(token ?? '');
 
   return (
     <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
@@ -54,7 +19,7 @@ export const ProfilePage = () => {
         w={[null, '100%', '70%', '60%', '50%', '40%']}
         mx="auto"
         align={'flex-start'}
-        spacing={5}
+        spacing={3}
         borderRadius="lg"
       >
         <HStack justify={'space-between'} w="100%" p={5}>
@@ -62,7 +27,7 @@ export const ProfilePage = () => {
             <Text fontSize={'lg'} fontWeight={'bold'}>
               Email address
             </Text>
-            <Text fontSize={'sm'}>placeholder@gmail.com</Text>
+            <Text fontSize={'sm'}>{profileDetails.email}</Text>
           </VStack>
         </HStack>
         <HStack justify={'space-between'} w="100%" p={5}>
@@ -70,16 +35,8 @@ export const ProfilePage = () => {
             <Text fontSize={'lg'} fontWeight={'bold'}>
               Username
             </Text>
-            <Text fontSize={'sm'}>Placeholder</Text>
+            <Text fontSize={'sm'}>{profileDetails.username}</Text>
           </VStack>
-        </HStack>
-        <HStack justify={'space-between'} w="100%" p={5}>
-          <VStack align={'flex-start'} spacing={0}>
-            <Text fontSize={'lg'} fontWeight={'bold'}>
-              Change password
-            </Text>
-          </VStack>
-          <PasswordChangeModal />
         </HStack>
       </VStack>
     </Flex>

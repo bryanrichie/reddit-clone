@@ -1,12 +1,12 @@
-import { Input, Textarea, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import _ from 'lodash';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { useAuth } from '../hooks/useAuth';
-import { useCreateTextPost } from '../hooks/useCreatePost';
+import { useAuth } from '../../hooks/useAuth';
+import { useCreateTextPost } from '../../hooks/useCreatePost';
 
 interface Props {
   onClose: () => void;
@@ -26,10 +26,10 @@ const validationSchema = yup
 
 export const TextPostForm = (props: Props) => {
   const { onClose } = props;
-  // const { onClose } = useDisclosure();
   const createPostMutation = useCreateTextPost();
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
+  const toast = useToast();
 
   const submitFont = useColorModeValue('blue.800', 'blue.100');
   const submitBg = useColorModeValue('white', 'gray.700');
@@ -52,9 +52,15 @@ export const TextPostForm = (props: Props) => {
           title: data.title,
           text: !_.isEmpty(data.text) ? data.text : null,
         };
-        return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
+        return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res: any) => {
           onClose();
-          navigate('/', { replace: true });
+          toast({
+            position: 'top',
+            title: 'Post successfully created!',
+            status: 'success',
+            duration: 5000,
+          });
+          navigate(`/post/${res.id}`, { replace: true });
         });
       }
     },

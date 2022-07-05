@@ -1,13 +1,12 @@
+import { Post } from '../types';
 import {
   AddCommentDto,
   AddPostVoteDto,
   CreateDatabasePostDto,
   DatabaseComment,
   DatabasePost,
-  DatabasePostVote,
   DatabaseService,
   DeletePostVoteDto,
-  UpdateDatabasePostDto,
   UpdatePostVoteDto,
 } from './database.service';
 
@@ -18,7 +17,7 @@ export class PostService {
     this.databaseService = databaseService;
   }
 
-  createPost(post: CreateDatabasePostDto): Promise<void> {
+  createPost(post: CreateDatabasePostDto): Promise<Post> {
     return this.databaseService.createPost(post);
   }
 

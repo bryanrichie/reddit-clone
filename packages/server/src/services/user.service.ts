@@ -1,6 +1,6 @@
 import { CustomError, CustomErrors } from '../customError';
 import { User } from '../types';
-import { DatabaseService, DatabaseUser } from './database.service';
+import { DatabaseService } from './database.service';
 
 export class UserService {
   databaseService: DatabaseService;
@@ -38,13 +38,4 @@ export class UserService {
     }
     return this.databaseService.getPartialUser(username);
   }
-
-  // updateUser(
-  //   userId: string,
-  //   email: string,
-  //   username: string,
-  //   password: string
-  // ): Promise<DatabaseUser> {
-  //   return this.databaseService.updateUser(userId, { email, username, password });
-  // }
 }

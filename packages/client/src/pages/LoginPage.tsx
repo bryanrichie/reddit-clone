@@ -1,7 +1,7 @@
 import { Box, Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import React from 'react';
-import { LoginForm } from '../components/LoginForm';
-import { RegisterForm } from '../components/RegisterForm';
+import { LoginForm } from '../components/forms/LoginForm';
+import { RegisterForm } from '../components/forms/RegisterForm';
 
 export const LoginPage = () => {
   return (
@@ -15,9 +15,6 @@ export const LoginPage = () => {
             <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
               Register
             </Tab>
-            <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
-              Forgot Password
-            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -26,7 +23,6 @@ export const LoginPage = () => {
             <TabPanel>
               <RegisterForm />
             </TabPanel>
-            <TabPanel></TabPanel>
           </TabPanels>
         </Tabs>
       </Box>

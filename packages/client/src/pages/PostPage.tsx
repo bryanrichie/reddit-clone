@@ -1,24 +1,9 @@
-import {
-  Flex,
-  HStack,
-  IconButton,
-  Image,
-  Spinner,
-  Text,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react';
-import _ from 'lodash';
+import { Flex, Spinner, useColorModeValue, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { MdArrowCircleDown, MdArrowCircleUp, MdOutlineModeComment } from 'react-icons/md';
-import { CommentCount } from '../components/CommentCount';
 import { Comments } from '../components/Comments';
-import { CommentsForm } from '../components/CommentsForm';
+import { CommentsForm } from '../components/forms/CommentsForm';
 import { NavBar } from '../components/NavBar';
 import { Post } from '../components/Post';
-import { Timestamp } from '../components/Timestamp';
-import { useAddPostVote } from '../hooks/usePostVote';
-import { useAuth } from '../hooks/useAuth';
 import { useGetSinglePost } from '../hooks/useGetSinglePost';
 import { useRequiredParams } from '../utils/useRequiredParams';
 
