@@ -45,6 +45,7 @@ export const CommentsForm = () => {
         };
         return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
           toast({
+            position: 'top',
             title: 'Comment added!',
             status: 'success',
             duration: 5000,

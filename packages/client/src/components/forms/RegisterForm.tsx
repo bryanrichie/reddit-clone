@@ -56,6 +56,7 @@ export const RegisterForm = () => {
         .registerAsync(data)
         .then(() => {
           toast({
+            position: 'top',
             title: 'Registration successful, logging in!',
             status: 'success',
             duration: 5000,
@@ -63,7 +64,13 @@ export const RegisterForm = () => {
           navigate('/', { replace: true });
         })
         .catch((error) => {
-          console.log('error', error);
+          toast({
+            position: 'top',
+            title: `${error.response.data.message}!`,
+            description: 'Please try using a different email or username.',
+            status: 'error',
+            duration: 5000,
+          });
         });
     },
     [registerUser]

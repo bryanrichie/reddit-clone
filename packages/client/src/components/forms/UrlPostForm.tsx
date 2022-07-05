@@ -55,6 +55,7 @@ export const UrlPostForm = (props: Props) => {
 
     if (!youtubeCheck && !urlValidation) {
       toast({
+        position: 'top',
         title: 'Invalid image url.',
         description: 'Please make sure your url contains a valid image extension.',
         status: 'error',
@@ -65,6 +66,7 @@ export const UrlPostForm = (props: Props) => {
       return createPostMutation.mutateAsync({ ...data, token: authToken }).then((res: any) => {
         onClose();
         toast({
+          position: 'top',
           title: 'Post successfully created!',
           status: 'success',
           duration: 5000,

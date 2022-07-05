@@ -55,6 +55,7 @@ export const TextPostForm = (props: Props) => {
         return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res: any) => {
           onClose();
           toast({
+            position: 'top',
             title: 'Post successfully created!',
             status: 'success',
             duration: 5000,

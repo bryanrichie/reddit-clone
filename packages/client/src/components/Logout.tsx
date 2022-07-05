@@ -11,6 +11,7 @@ export const Logout = () => {
   const onLogout = () => {
     logout();
     toast({
+      position: 'top',
       title: 'Logged out, see you later!',
       status: 'success',
       duration: 5000,

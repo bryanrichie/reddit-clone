@@ -42,14 +42,26 @@ export const LoginForm = () => {
   const { login } = useAuthContext();
 
   const onSubmit = (data: FormValues) => {
-    login.loginAsync(data).then((res: any) => {
-      toast({
-        title: 'Logging in, welcome back!',
-        status: 'success',
-        duration: 5000,
+    login
+      .loginAsync(data)
+      .then((res: any) => {
+        toast({
+          position: 'top',
+          title: 'Logging in, welcome back!',
+          status: 'success',
+          duration: 5000,
+        });
+        navigate('/', { replace: true });
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          title: `${error.response.data.message}`,
+          description: 'Please make sure your username and password are correct.',
+          status: 'error',
+          duration: 5000,
+        });
       });
-      navigate('/', { replace: true });
-    });
   };
 
   return (
