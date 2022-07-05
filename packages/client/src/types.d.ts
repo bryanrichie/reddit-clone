@@ -27,4 +27,5 @@ export interface JwtToken {
   exp: number;
   id: string;
   username: string;
+  email: string;
 }

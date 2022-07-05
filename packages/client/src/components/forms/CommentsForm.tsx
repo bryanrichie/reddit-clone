@@ -1,13 +1,11 @@
-import { Input, Textarea, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
-import { useWindowScroll } from 'react-use';
 import * as yup from 'yup';
-import { useAddComment } from '../hooks/useAddComment';
-import { useAuth } from '../hooks/useAuth';
-import { useRequiredParams } from '../utils/useRequiredParams';
+import { useAddComment } from '../../hooks/useAddComment';
+import { useAuth } from '../../hooks/useAuth';
+import { useRequiredParams } from '../../utils/useRequiredParams';
 
 interface FormValues {
   comment: string;
@@ -24,6 +22,7 @@ export const CommentsForm = () => {
   const addCommentMutation = useAddComment(postId);
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
+  const toast = useToast();
 
   const inputBorder = useColorModeValue('blue.800', 'blue.100');
   const submitFont = useColorModeValue('blue.800', 'blue.100');
@@ -44,7 +43,13 @@ export const CommentsForm = () => {
           postId: (postId as string) ?? '',
           comment: data.comment,
         };
-        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
+        return addCommentMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
+          toast({
+            title: 'Comment added!',
+            status: 'success',
+            duration: 5000,
+          });
+        });
       }
     },
     [addCommentMutation]

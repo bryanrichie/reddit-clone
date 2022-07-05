@@ -1,13 +1,12 @@
-import { Input, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import _ from 'lodash';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { useAuth } from '../hooks/useAuth';
-import { useCreateUrlPost } from '../hooks/useCreatePost';
-import _ from 'lodash';
-import { Post } from '../types';
+import { useAuth } from '../../hooks/useAuth';
+import { useCreateTextPost } from '../../hooks/useCreatePost';
 
 interface Props {
   onClose: () => void;
@@ -15,19 +14,19 @@ interface Props {
 
 interface FormValues {
   title: string;
-  url: string;
+  text?: string;
 }
 
 const validationSchema = yup
   .object({
     title: yup.string().max(300).required(),
-    url: yup.string().url().required(),
+    text: yup.string().max(40000).optional(),
   })
   .required();
 
-export const UrlPostForm = (props: Props) => {
+export const TextPostForm = (props: Props) => {
   const { onClose } = props;
-  const createPostMutation = useCreateUrlPost();
+  const createPostMutation = useCreateTextPost();
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
   const toast = useToast();
@@ -46,34 +45,26 @@ export const UrlPostForm = (props: Props) => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: FormValues) => {
-    const youtubeCheck = _.some(['youtube', 'youtu.be'], (s) => _.includes(data.url, s));
-    const imgUrlExtension = data.url.slice(
-      (Math.max(0, data.url.lastIndexOf('.')) || Infinity) + 1
-    );
-    const validUrlExtensions = ['jpeg', 'jpg', 'png', 'gif', 'gifv', 'apng', 'avif', 'svg', 'webp'];
-    const urlValidation = _.includes(validUrlExtensions, imgUrlExtension);
-
-    if (!youtubeCheck && !urlValidation) {
-      toast({
-        title: 'Invalid image url.',
-        description: 'Please make sure your url contains a valid image extension.',
-        status: 'error',
-        duration: 5000,
-      });
-    }
-    if (authToken) {
-      return createPostMutation.mutateAsync({ ...data, token: authToken }).then((res: any) => {
-        onClose();
-        toast({
-          title: 'Post successfully created!',
-          status: 'success',
-          duration: 5000,
+  const onSubmit = React.useCallback(
+    (data: FormValues) => {
+      if (authToken) {
+        const request = {
+          title: data.title,
+          text: !_.isEmpty(data.text) ? data.text : null,
+        };
+        return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res: any) => {
+          onClose();
+          toast({
+            title: 'Post successfully created!',
+            status: 'success',
+            duration: 5000,
+          });
+          navigate(`/post/${res.id}`, { replace: true });
         });
-        navigate(`/post/${res.id}`, { replace: true });
-      });
-    }
-  };
+      }
+    },
+    [createPostMutation]
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -88,13 +79,14 @@ export const UrlPostForm = (props: Props) => {
           bg={'white'}
           color="black"
         />
-        <Input
-          {...register('url')}
-          id="url"
-          placeholder="Url"
+        <Textarea
+          {...register('text')}
+          id="text"
+          placeholder="Text (optional)"
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputBorder}
           bg={'white'}
+          h={250}
           color="black"
         />
         <Input

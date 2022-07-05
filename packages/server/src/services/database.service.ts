@@ -104,20 +104,6 @@ export class DatabaseService {
     });
   }
 
-  // async updateUser(userId: string, user: DatabaseUser): Promise<DatabaseUser> {
-  //   const { email, username, password } = user;
-
-  //   const queryResult = await this.pool.connect(async (connection) => {
-  //     return connection.one<DatabaseUser>(
-  //       sql`UPDATE users
-  //           SET email = ${email}, username = ${username}, password_hash = ${password}, updated_at = now()
-  //           WHERE id = ${userId}
-  //           RETURNING email, username, password_hash;`
-  //     );
-  //   });
-  //   return queryResult;
-  // }
-
   async validUser(username: string, password: string): Promise<Boolean> {
     return this.pool.connect((connection) => {
       return connection.exists(
@@ -141,25 +127,12 @@ export class DatabaseService {
   async getPartialUser(username: string): Promise<User | null> {
     return this.pool.connect((connection) => {
       return connection.maybeOne<User>(
-        sql`SELECT id, username 
+        sql`SELECT id, username, email
             FROM users 
             WHERE username = ${username}`
       );
     });
   }
-
-  // async createPost(userPost: CreateDatabasePostDto): Promise<void> {
-  //   const { userId, title, text, url } = userPost;
-
-  //   await this.pool.connect(async (connection) => {
-  //     const { rows } = await connection.query<DatabasePost>(
-  //       sql`INSERT INTO posts (user_id, title, text, url)
-  //           VALUES (${userId}, ${title}, ${text}, ${url})
-  //           RETURNING id`
-  //     );
-  //     return rows;
-  //   });
-  // }
 
   async createPost(userPost: CreateDatabasePostDto): Promise<Post> {
     const { userId, title, text, url } = userPost;
@@ -172,17 +145,6 @@ export class DatabaseService {
       );
     });
   }
-
-  // async createPost(userPost: CreateDatabasePostDto): Promise
-
-  // async deletePost(postId: string, userId: string): Promise<void> {
-  //   await this.pool.connect((connection) => {
-  //     return connection.one(
-  //       sql`DELETE FROM posts
-  //           WHERE id = ${postId} AND user_id = ${userId}`
-  //     );
-  //   });
-  // }
 
   // async editPost(postId: string, userPost: UpdateDatabasePostDto): Promise<DatabasePost> {
   //   const { title, text, url } = userPost;
@@ -254,7 +216,8 @@ export class DatabaseService {
             FROM comments
             INNER JOIN posts ON comments.post_id = posts.id
             INNER JOIN users ON comments.user_id = users.id
-            WHERE posts.id = ${postId}`
+            WHERE posts.id = ${postId}
+            ORDER BY comments.created_at ASC`
       );
       return rows;
     });

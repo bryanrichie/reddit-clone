@@ -5,10 +5,8 @@ import {
   CreateDatabasePostDto,
   DatabaseComment,
   DatabasePost,
-  DatabasePostVote,
   DatabaseService,
   DeletePostVoteDto,
-  UpdateDatabasePostDto,
   UpdatePostVoteDto,
 } from './database.service';
 

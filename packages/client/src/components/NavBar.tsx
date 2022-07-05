@@ -18,6 +18,7 @@ import React from 'react';
 import { MdAccountCircle, MdLogout, MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { CreatePostModal } from './CreatePostModal';
+import { Logout } from './Logout';
 
 export const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -70,7 +71,7 @@ export const NavBar = () => {
               <MenuDivider bg={menuDivider} />
               <MenuItem _hover={{ bg: navButtonBg, color: navFont }} fontWeight="bold">
                 <MdLogout size={'25px'} />
-                <Text ml="10px">Logout</Text>
+                <Logout />
               </MenuItem>
             </MenuList>
           </Menu>

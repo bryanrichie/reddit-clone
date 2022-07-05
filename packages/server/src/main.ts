@@ -88,18 +88,6 @@ app.post('/login', async (req, res, next) => {
   }
 });
 
-// app.post('/user/update', async (req, res, next) => {
-//   try {
-//     const { userId, email, username, password } = req.body;
-
-//     const updatedUser = await userService.updateUser(userId, email, username, password);
-
-//     res.status(200).json({ updatedUser, status: 'User successfully updated.' });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
 app.post('/post/create', authMiddleware, async (req: Request, res, next) => {
   try {
     const { title, text, url } = req.body;
