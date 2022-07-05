@@ -6,8 +6,8 @@ import { NavBar } from '../components/NavBar';
 import { JwtToken } from '../types';
 
 export const ProfilePage = () => {
-  const bodyBg = useColorModeValue('blue.200', 'blue.900');
-  const settingsBg = useColorModeValue('white', 'gray.700');
+  const bodyBg = useColorModeValue('gray.300', 'blue.900');
+  const profileBg = useColorModeValue('white', 'gray.700');
   const [token] = useLocalStorage<string | undefined>('auth');
   const profileDetails = decode<JwtToken>(token ?? '');
 
@@ -15,7 +15,7 @@ export const ProfilePage = () => {
     <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
       <NavBar />
       <VStack
-        bg={settingsBg}
+        bg={profileBg}
         w={[null, '100%', '70%', '60%', '50%', '40%']}
         mx="auto"
         align={'flex-start'}

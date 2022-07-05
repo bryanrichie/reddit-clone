@@ -1,4 +1,4 @@
-import { Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Button, Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import _ from 'lodash';
 import React from 'react';
@@ -31,11 +31,11 @@ export const TextPostForm = (props: Props) => {
   const { authToken } = useAuth();
   const toast = useToast();
 
-  const submitFont = useColorModeValue('blue.800', 'blue.100');
-  const submitBg = useColorModeValue('white', 'gray.700');
+  const inputFocusBorder = useColorModeValue('blue.800', 'blue.100');
+  const submitBg = useColorModeValue('blue.800', 'gray.700');
+  const submitFont = useColorModeValue('white', 'blue.100');
+  const submitHoverBg = useColorModeValue('blue.600', 'blue.100');
   const submitHoverFont = useColorModeValue('white', 'blue.700');
-  const submitHoverBg = useColorModeValue('blue.800', 'blue.100');
-  const inputBorder = useColorModeValue('blue.800', 'blue.100');
 
   const {
     register,
@@ -76,35 +76,42 @@ export const TextPostForm = (props: Props) => {
           type="text"
           placeholder="Title"
           _placeholder={{ color: 'gray' }}
-          focusBorderColor={inputBorder}
+          focusBorderColor={inputFocusBorder}
           bg={'white'}
           color="black"
+          borderWidth="1px"
+          borderColor="black"
+          _hover={{ borderWidth: '2px', borderColor: 'black' }}
         />
         <Textarea
           {...register('text')}
           id="text"
           placeholder="Text (optional)"
           _placeholder={{ color: 'gray' }}
-          focusBorderColor={inputBorder}
+          focusBorderColor={inputFocusBorder}
           bg={'white'}
           h={250}
           color="black"
+          borderWidth="1px"
+          borderColor="black"
+          _hover={{ borderWidth: '2px', borderColor: 'black' }}
         />
-        <Input
+        <Button
           type="submit"
-          value="Post"
           alignSelf={'flex-end'}
           w={100}
           mt={-5}
           mr={4}
           borderRadius={50}
-          color={submitFont}
           bg={submitBg}
+          color={submitFont}
           fontWeight="bold"
-          _hover={{ color: submitHoverFont, bg: submitHoverBg }}
+          _hover={{ bg: submitHoverBg, color: submitHoverFont }}
           _focus={{ boxShadow: 0 }}
           border={0}
-        />
+        >
+          Post
+        </Button>
       </VStack>
     </form>
   );

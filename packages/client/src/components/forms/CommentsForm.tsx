@@ -1,4 +1,4 @@
-import { Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Button, Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,11 +24,11 @@ export const CommentsForm = () => {
   const { authToken } = useAuth();
   const toast = useToast();
 
-  const inputBorder = useColorModeValue('blue.800', 'blue.100');
-  const submitFont = useColorModeValue('blue.800', 'blue.100');
-  const submitButtonBg = useColorModeValue('white', 'gray.700');
+  const inputFocusBorder = useColorModeValue('blue.800', 'blue.100');
+  const submitBg = useColorModeValue('blue.800', 'gray.700');
+  const submitFont = useColorModeValue('white', 'blue.100');
+  const submitHoverBg = useColorModeValue('blue.600', 'blue.100');
   const submitHoverFont = useColorModeValue('white', 'blue.700');
-  const submitHoverBg = useColorModeValue('blue.800', 'blue.100');
 
   const {
     register,
@@ -64,30 +64,34 @@ export const CommentsForm = () => {
           id="comment"
           placeholder="What do you think?"
           _placeholder={{ color: 'gray' }}
-          focusBorderColor={inputBorder}
+          focusBorderColor={inputFocusBorder}
           borderRadius="0"
           bg={'white'}
           color="black"
-          borderColor="gray"
           h={150}
           w={[300, 500, 650, 750, 900]}
+          borderWidth="1px"
+          borderColor="black"
+          _hover={{ borderWidth: '2px', borderColor: 'black' }}
         />
-        <Input
+
+        <Button
           type="submit"
-          value="Comment"
           fontSize={'sm'}
           w={100}
           alignSelf="flex-end"
           borderRadius={50}
           borderWidth={2}
           borderColor={submitFont}
-          bg={submitButtonBg}
+          bg={submitBg}
           color={submitFont}
           fontWeight="bold"
           _hover={{ bg: submitHoverBg, color: submitHoverFont }}
           _active={{ bg: submitHoverBg, color: submitHoverFont }}
           _focus={{ boxShadow: '0' }}
-        />
+        >
+          Comment
+        </Button>
       </VStack>
     </form>
   );

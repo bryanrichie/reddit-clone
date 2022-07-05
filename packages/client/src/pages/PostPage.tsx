@@ -11,9 +11,8 @@ export const PostPage = () => {
   const { postId } = useRequiredParams<{ postId: string }>();
   const { data: post, isLoading, error } = useGetSinglePost(postId);
 
-  const bodyBg = useColorModeValue('blue.200', 'blue.900');
+  const bodyBg = useColorModeValue('gray.300', 'blue.900');
   const postBg = useColorModeValue('white', 'gray.700');
-  const postBorder = useColorModeValue('gray.700', 'white');
 
   const checkLoading = () => {
     if (isLoading) {
@@ -31,8 +30,6 @@ export const PostPage = () => {
           mt={3}
           borderRadius="md"
           bg={postBg}
-          border="1px"
-          borderColor={postBorder}
           p={5}
           w={[null, '100%', '90%', '80%', '70%', '60%']}
           mx="auto"
