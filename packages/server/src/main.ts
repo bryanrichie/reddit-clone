@@ -219,5 +219,5 @@ if (config.isProduction) {
 app.use(errorMiddleware);
 
 app.listen(config.port, () => {
-  console.log(`Example app listening on port ${config.port}`);
+  console.log(`Reddit Clone listening on port ${config.port}`);
 });

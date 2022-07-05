@@ -1,9 +1,9 @@
 import { Flex, HStack, Text, useColorModeValue, VStack } from '@chakra-ui/react';
-import React from 'react';
-import { NavBar } from '../components/NavBar';
 import decode from 'jwt-decode';
-import { JwtToken } from '../types';
+import React from 'react';
 import { useLocalStorage } from 'react-use';
+import { NavBar } from '../components/NavBar';
+import { JwtToken } from '../types';
 
 export const ProfilePage = () => {
   const bodyBg = useColorModeValue('blue.200', 'blue.900');
@@ -19,7 +19,7 @@ export const ProfilePage = () => {
         w={[null, '100%', '70%', '60%', '50%', '40%']}
         mx="auto"
         align={'flex-start'}
-        spacing={5}
+        spacing={3}
         borderRadius="lg"
       >
         <HStack justify={'space-between'} w="100%" p={5}>
