@@ -25,13 +25,13 @@ const validationSchema = yup
     email: yup.string().email('Email is invalid').required('Email is required'),
     username: yup
       .string()
-      .min(5, 'Username must be at least 5 characters')
+      .min(3, 'Username must be at least 3 characters')
       .max(20, 'Username can not exceed 20 characters')
       .required('Username is required'),
     password: yup
       .string()
       .required('Password is required')
-      .min(12, 'Password must be at least 12 characters'),
+      .min(6, 'Password must be at least 6 characters'),
   })
   .required();
 
@@ -88,7 +88,9 @@ export const RegisterForm = () => {
           bg="white"
           color="black"
         />
-        <Text>{errors.email?.message}</Text>
+        <Text fontWeight="bold" color="red.200">
+          {errors.email?.message}
+        </Text>
         <Input
           {...register('username')}
           id="username"
@@ -98,7 +100,9 @@ export const RegisterForm = () => {
           bg="white"
           color="black"
         />
-        <Text>{errors.username?.message}</Text>
+        <Text fontWeight="bold" color="red.200">
+          {errors.username?.message}
+        </Text>
         <InputGroup>
           <Input
             {...register('password')}
@@ -125,7 +129,9 @@ export const RegisterForm = () => {
             </Button>
           </InputRightElement>
         </InputGroup>
-        <Text>{errors.password?.message}</Text>
+        <Text fontWeight="bold" color="red.200">
+          {errors.password?.message}
+        </Text>
         <Input
           type="submit"
           value="Register"

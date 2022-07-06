@@ -23,15 +23,15 @@ export const CreatePostModal = () => {
 
   const navButtonBg = useColorModeValue('blue.800', 'white');
   const navButtonFont = useColorModeValue('white', 'blue.800');
-  const navButtonHoverBg = useColorModeValue('blue.600', 'blue.800');
-  const navButtonHoverFont = useColorModeValue('white', 'white');
+  const navButtonHoverBg = useColorModeValue('blue.600', 'gray.400');
+  const navButtonHoverFont = useColorModeValue('white', 'blue.800');
   const modalBg = useColorModeValue('white', 'blue.800');
   const modalFont = useColorModeValue('blue.800', 'white');
-  const modalCloseBg = useColorModeValue('blue.800', 'blue.800');
+  const modalCloseBg = useColorModeValue('blue.800', 'white');
   const modalCloseFont = useColorModeValue('white', 'blue.800');
   const modalTabBg = useColorModeValue('blue.800', 'white');
   const modalTabFont = useColorModeValue('white', 'blue.800');
-  const modalTabSelectedBg = useColorModeValue('blue.600', 'blue.800');
+  const modalTabSelectedBg = useColorModeValue('blue.600', 'gray.400');
   const modalTabSelectedFont = useColorModeValue('white', 'blue.800');
 
   return (

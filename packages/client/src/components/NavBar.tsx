@@ -27,8 +27,8 @@ export const NavBar = () => {
   const navHeaderFont = useColorModeValue('blue.800', 'white');
   const navButtonBg = useColorModeValue('blue.800', 'white');
   const navButtonFont = useColorModeValue('white', 'blue.800');
-  const navButtonHoverBg = useColorModeValue('blue.600', 'blue.800');
-  const navButtonHoverFont = useColorModeValue('white', 'white');
+  const navButtonHoverBg = useColorModeValue('blue.600', 'gray.400');
+  const navButtonHoverFont = useColorModeValue('white', 'blue.800');
 
   const menuDivider = useColorModeValue('blue.800', 'white');
 

@@ -21,8 +21,8 @@ interface FormValues {
 
 const validationSchema = yup
   .object({
-    username: yup.string().required('Username is required'),
-    password: yup.string().required('Password is required'),
+    username: yup.string().required('Please enter your username'),
+    password: yup.string().required('Please enter your password'),
   })
   .required();
 
@@ -76,7 +76,9 @@ export const LoginForm = () => {
           bg="white"
           color="black"
         />
-        <Text>{errors.username?.message}</Text>
+        <Text fontWeight="bold" color="red.200">
+          {errors.username?.message}
+        </Text>
         <InputGroup>
           <Input
             {...register('password')}
@@ -103,7 +105,9 @@ export const LoginForm = () => {
             </Button>
           </InputRightElement>
         </InputGroup>
-        <Text>{errors.password?.message}</Text>
+        <Text fontWeight="bold" color="red.200">
+          {errors.password?.message}
+        </Text>
         <Input
           type="submit"
           value="Login"

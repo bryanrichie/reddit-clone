@@ -32,10 +32,11 @@ export const TextPostForm = (props: Props) => {
   const toast = useToast();
 
   const inputFocusBorder = useColorModeValue('blue.800', 'blue.100');
-  const submitBg = useColorModeValue('blue.800', 'gray.700');
-  const submitFont = useColorModeValue('white', 'blue.100');
-  const submitHoverBg = useColorModeValue('blue.600', 'blue.100');
-  const submitHoverFont = useColorModeValue('white', 'blue.700');
+  const inputHoverBorder = useColorModeValue('black', 'white');
+  const submitBg = useColorModeValue('blue.800', 'white');
+  const submitFont = useColorModeValue('white', 'blue.800');
+  const submitHoverBg = useColorModeValue('blue.600', 'gray.400');
+  const submitHoverFont = useColorModeValue('white', 'blue.800');
 
   const {
     register,
@@ -81,7 +82,7 @@ export const TextPostForm = (props: Props) => {
           color="black"
           borderWidth="1px"
           borderColor="black"
-          _hover={{ borderWidth: '2px', borderColor: 'black' }}
+          _hover={{ borderWidth: '2px', borderColor: inputHoverBorder }}
         />
         <Textarea
           {...register('text')}
@@ -94,7 +95,7 @@ export const TextPostForm = (props: Props) => {
           color="black"
           borderWidth="1px"
           borderColor="black"
-          _hover={{ borderWidth: '2px', borderColor: 'black' }}
+          _hover={{ borderWidth: '2px', borderColor: inputHoverBorder }}
         />
         <Button
           type="submit"

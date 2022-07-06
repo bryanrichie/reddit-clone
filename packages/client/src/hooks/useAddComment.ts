@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { useConfig } from './useConfig';
 import { getCommentsQueryKey } from './useGetComments';
+import { getPostQueryKey } from './useGetSinglePost';
 
 interface CommentVariables {
   token: string;
@@ -30,6 +31,7 @@ export const useAddComment = (postId: string) => {
   return useMutation(addComment(config.apiUrl), {
     onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries(getCommentsQueryKey(postId));
+      await queryClient.invalidateQueries(getPostQueryKey(postId));
     },
   });
 };
