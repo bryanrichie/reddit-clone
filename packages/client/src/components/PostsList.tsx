@@ -23,7 +23,6 @@ export const PostsList = () => {
   const { data, isLoading } = useGetPosts();
 
   const postBg = useColorModeValue('white', 'gray.700');
-  const postBorder = useColorModeValue('gray.700', 'white');
   const overflowGradient = useColorModeValue(
     'linear-gradient(transparent 200px, white)',
     'linear-gradient(transparent 200px, #2D3748)'
@@ -34,14 +33,14 @@ export const PostsList = () => {
     const urlCheck = () => {
       if (_.includes(post.url, 'youtube')) {
         return (
-          <AspectRatio maxW="300px" ratio={16 / 9}>
+          <AspectRatio maxW="600px" ratio={16 / 9}>
             <iframe src={_.replace(post.url ?? '', 'watch?v=', 'embed/')} allowFullScreen />
           </AspectRatio>
         );
       }
       if (_.includes(post.url, 'youtu.be')) {
         return (
-          <AspectRatio maxW="300px" ratio={16 / 9}>
+          <AspectRatio maxW="600px" ratio={16 / 9}>
             <iframe
               src={_.replace(post.url ?? '', 'youtu.be', 'youtube.com/embed/')}
               allowFullScreen
@@ -81,8 +80,6 @@ export const PostsList = () => {
         listStyleType={'none'}
         borderRadius="md"
         bg={postBg}
-        border="1px"
-        borderColor={postBorder}
         p={2}
         minH="120px"
       >

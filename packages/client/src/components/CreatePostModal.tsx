@@ -21,21 +21,27 @@ import { UrlPostForm } from './forms/UrlPostForm';
 export const CreatePostModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const navFont = useColorModeValue('blue.800', 'blue.100');
-  const navButtonBg = useColorModeValue('white', 'gray.700');
-  const navHoverFont = useColorModeValue('white', 'blue.700');
-  const navHoverBg = useColorModeValue('blue.800', 'blue.100');
-  const modalFont = useColorModeValue('blue.800', 'blue.100');
-  const modalBg = useColorModeValue('blue.100', 'blue.800');
+  const navButtonBg = useColorModeValue('blue.800', 'white');
+  const navButtonFont = useColorModeValue('white', 'blue.800');
+  const navButtonHoverBg = useColorModeValue('blue.600', 'gray.400');
+  const navButtonHoverFont = useColorModeValue('white', 'blue.800');
+  const modalBg = useColorModeValue('white', 'blue.800');
+  const modalFont = useColorModeValue('blue.800', 'white');
+  const modalCloseBg = useColorModeValue('blue.800', 'white');
+  const modalCloseFont = useColorModeValue('white', 'blue.800');
+  const modalTabBg = useColorModeValue('blue.800', 'white');
+  const modalTabFont = useColorModeValue('white', 'blue.800');
+  const modalTabSelectedBg = useColorModeValue('blue.600', 'gray.400');
+  const modalTabSelectedFont = useColorModeValue('white', 'blue.800');
 
   return (
     <>
       <Button
         bg={navButtonBg}
-        color={navFont}
+        color={navButtonFont}
         fontWeight="bold"
-        _hover={{ bg: navHoverBg, color: navHoverFont }}
-        _active={{ bg: navHoverBg, color: navHoverFont }}
+        _hover={{ bg: navButtonHoverBg, color: navButtonHoverFont }}
+        _active={{ bg: navButtonHoverBg, color: navButtonHoverFont }}
         _focus={{ boxShadow: '0' }}
         onClick={onOpen}
       >
@@ -55,26 +61,29 @@ export const CreatePostModal = () => {
             Create a post
           </ModalHeader>
           <ModalCloseButton
-            bg={navButtonBg}
-            _hover={{ color: navHoverFont, bg: navHoverBg }}
-            _active={{ color: navHoverFont, bg: navHoverBg }}
+            bg={modalCloseBg}
+            color={modalCloseFont}
+            _hover={{ color: navButtonHoverFont, bg: navButtonHoverBg }}
+            _active={{ color: navButtonHoverFont, bg: navButtonHoverBg }}
             _focus={{ boxShadow: 0 }}
           />
           <ModalBody>
             <Tabs variant="soft-rounded" isFitted>
               <TabList mx={4}>
                 <Tab
-                  color={modalFont}
+                  bg={modalTabBg}
+                  color={modalTabFont}
                   fontWeight="bold"
-                  _selected={{ color: navHoverFont, bg: navHoverBg }}
+                  _selected={{ bg: modalTabSelectedBg, color: modalTabSelectedFont }}
                   _focus={{ boxShadow: 0 }}
                 >
                   Text
                 </Tab>
                 <Tab
-                  color={modalFont}
+                  bg={modalTabBg}
+                  color={modalTabFont}
                   fontWeight="bold"
-                  _selected={{ color: navHoverFont, bg: navHoverBg }}
+                  _selected={{ bg: modalTabSelectedBg, color: modalTabSelectedFont }}
                   _focus={{ boxShadow: 0 }}
                 >
                   Images & Videos

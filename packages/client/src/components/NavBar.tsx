@@ -23,12 +23,14 @@ import { Logout } from './Logout';
 export const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const navBg = useColorModeValue('blue.100', 'blue.800');
-  const navFont = useColorModeValue('blue.800', 'blue.100');
-  const navButtonBg = useColorModeValue('white', 'gray.700');
-  const navHoverFont = useColorModeValue('white', 'blue.700');
-  const navHoverBg = useColorModeValue('blue.800', 'blue.100');
-  const menuDivider = useColorModeValue('white', 'blue.700');
+  const navBg = useColorModeValue('white', 'blue.800');
+  const navHeaderFont = useColorModeValue('blue.800', 'white');
+  const navButtonBg = useColorModeValue('blue.800', 'white');
+  const navButtonFont = useColorModeValue('white', 'blue.800');
+  const navButtonHoverBg = useColorModeValue('blue.600', 'gray.400');
+  const navButtonHoverFont = useColorModeValue('white', 'blue.800');
+
+  const menuDivider = useColorModeValue('blue.800', 'white');
 
   return (
     <Flex w={'100%'} flexDir="column" mb={5}>
@@ -39,7 +41,7 @@ export const NavBar = () => {
           _hover={{ textDecoration: 'none' }}
           _focus={{ boxShadow: 0 }}
         >
-          <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navFont}>
+          <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight="extrabold" color={navHeaderFont}>
             reddit clone
           </Text>
         </Link>
@@ -49,27 +51,26 @@ export const NavBar = () => {
             <MenuButton
               as={Button}
               bg={navButtonBg}
-              color={navFont}
+              color={navButtonFont}
               fontWeight="bold"
-              _hover={{ bg: navHoverBg, color: navHoverFont }}
-              _active={{ bg: navHoverBg, color: navHoverFont }}
+              _hover={{ bg: navButtonHoverBg, color: navButtonHoverFont }}
+              _active={{ bg: navButtonHoverBg, color: navButtonHoverFont }}
               _focus={{ boxShadow: '0' }}
             >
               Account <ChevronDownIcon />
             </MenuButton>
-            <MenuList bg={navHoverBg} color={navHoverFont}>
+            <MenuList bg={navButtonHoverBg} color={navButtonHoverFont}>
               <Link as={ReactRouterLink} to="/profile" _hover={{ textDecoration: 'none' }}>
                 <MenuItem
-                  _hover={{ bg: navButtonBg, color: navFont }}
-                  _focus={{ bg: navHoverBg }}
+                  _hover={{ bg: navButtonBg, color: navButtonFont }}
+                  _focus={{ bg: navButtonHoverBg }}
                   fontWeight="bold"
+                  py={3}
                 >
                   <MdAccountCircle size={'25px'} /> <Text ml="10px">Profile</Text>
                 </MenuItem>
               </Link>
-
-              <MenuDivider bg={menuDivider} />
-              <MenuItem _hover={{ bg: navButtonBg, color: navFont }} fontWeight="bold">
+              <MenuItem _hover={{ bg: navButtonBg, color: navButtonFont }} fontWeight="bold" py={3}>
                 <MdLogout size={'25px'} />
                 <Logout />
               </MenuItem>
@@ -78,9 +79,9 @@ export const NavBar = () => {
           <IconButton
             aria-label="dark-mode"
             bg={navButtonBg}
-            color={navFont}
-            _hover={{ bg: navHoverBg, color: navHoverFont }}
-            _active={{ bg: navHoverBg, color: navHoverFont }}
+            color={navButtonFont}
+            _hover={{ bg: navButtonHoverBg, color: navButtonHoverFont }}
+            _active={{ bg: navButtonHoverBg, color: navButtonHoverFont }}
             _focus={{ boxShadow: '0' }}
             icon={
               colorMode === 'light' ? (

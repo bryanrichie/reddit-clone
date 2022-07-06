@@ -16,7 +16,6 @@ export const Post = (props: Props) => {
   const { postId, post } = props;
 
   const postBg = useColorModeValue('white', 'gray.700');
-  const postBorder = useColorModeValue('gray.700', 'white');
 
   const isTitleOnlyPost = !post.text && !post.url;
   const urlCheck = () => {
@@ -47,8 +46,6 @@ export const Post = (props: Props) => {
       key={post.id}
       borderRadius="md"
       bg={postBg}
-      border="1px"
-      borderColor={postBorder}
       p={2}
       w={[null, '100%', '90%', '80%', '70%', '60%']}
       mx="auto"
