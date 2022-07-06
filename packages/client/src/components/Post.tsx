@@ -1,11 +1,15 @@
 import { AspectRatio, HStack, Image, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import decode from 'jwt-decode';
 import _ from 'lodash';
-import { MdOutlineModeComment } from 'react-icons/md';
-import { Timestamp } from './Timestamp';
-import { CommentCount } from './CommentCount';
-import { VoteButtons } from './VoteButtons';
 import React from 'react';
+import { MdOutlineModeComment } from 'react-icons/md';
+import { useLocalStorage } from 'react-use';
 import * as Types from '../types';
+import { JwtToken } from '../types';
+import { CommentCount } from './CommentCount';
+import { PostDelete } from './PostDelete';
+import { Timestamp } from './Timestamp';
+import { VoteButtons } from './VoteButtons';
 
 interface Props {
   postId: string;
@@ -14,8 +18,11 @@ interface Props {
 
 export const Post = (props: Props) => {
   const { postId, post } = props;
+  const [token] = useLocalStorage<string | undefined>('auth');
+  const profileDetails = decode<JwtToken>(token ?? '');
 
   const postBg = useColorModeValue('white', 'gray.700');
+  const commentFont = useColorModeValue('gray.500', 'gray.200');
 
   const isTitleOnlyPost = !post.text && !post.url;
   const urlCheck = () => {
@@ -72,9 +79,12 @@ export const Post = (props: Props) => {
           {!isTitleOnlyPost ? content : null}
         </VStack>
       </HStack>
-      <HStack fontWeight="bold" pl={'50px'} w="100%" mt={2}>
-        <MdOutlineModeComment color="#718096" size={'20px'} />
-        <CommentCount commentCount={post.comment_count} />
+      <HStack fontWeight="bold" w="100%" mt={2} justify="space-between">
+        <HStack pl={'50px'} color={commentFont}>
+          <MdOutlineModeComment size={'20px'} />
+          <CommentCount commentCount={post.comment_count} />
+        </HStack>
+        {post.user_id === profileDetails.id ? <PostDelete postId={postId} /> : ''}
       </HStack>
     </VStack>
   );

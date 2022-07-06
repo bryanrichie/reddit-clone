@@ -59,7 +59,7 @@ CREATE TABLE "comments" (
   "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   PRIMARY KEY ("id"),
   FOREIGN KEY ("user_id") REFERENCES users("id"),
-  FOREIGN KEY ("post_id") REFERENCES posts("id")
+  FOREIGN KEY ("post_id") REFERENCES posts("id") ON DELETE CASCADE
 );
 
 CREATE INDEX ON "comments" (id);
@@ -81,7 +81,7 @@ CREATE TABLE "user_post_votes" (
   "vote" BOOLEAN,
   PRIMARY KEY ("id"),
   FOREIGN KEY ("user_id") REFERENCES users("id"),
-  FOREIGN KEY ("post_id") REFERENCES posts("id"),
+  FOREIGN KEY ("post_id") REFERENCES posts("id") ON DELETE CASCADE,
   UNIQUE("user_id", "post_id")
 );
 

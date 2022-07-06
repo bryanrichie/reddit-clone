@@ -6,6 +6,7 @@ import {
   DatabaseComment,
   DatabasePost,
   DatabaseService,
+  DeleteDatabasePostDto,
   DeletePostVoteDto,
   UpdatePostVoteDto,
 } from './database.service';
@@ -21,13 +22,9 @@ export class PostService {
     return this.databaseService.createPost(post);
   }
 
-  // deletePost(postId: string, userId: string) {
-  //   return this.databaseService.deletePost(postId, userId);
-  // }
-
-  // editPost(postId: string, post: UpdateDatabasePostDto): Promise<DatabasePost> {
-  //   return this.databaseService.editPost(postId, post);
-  // }
+  deletePost(post: DeleteDatabasePostDto): Promise<void> {
+    return this.databaseService.deletePost(post);
+  }
 
   getPosts(userId: string): Promise<readonly DatabasePost[]> {
     return this.databaseService.getPosts(userId);

@@ -35,6 +35,10 @@ export interface UpdateDatabasePostDto {
   url?: string | null;
 }
 
+export interface DeleteDatabasePostDto {
+  postId: string;
+}
+
 export interface DatabaseComment {
   id: string;
   postId: string;
@@ -146,24 +150,16 @@ export class DatabaseService {
     });
   }
 
-  // async editPost(postId: string, userPost: UpdateDatabasePostDto): Promise<DatabasePost> {
-  //   const { title, text, url } = userPost;
+  async deletePost(post: DeleteDatabasePostDto): Promise<void> {
+    const { postId } = post;
 
-  //   const queryResult = await this.pool.connect(async (connection) => {
-  //     const updateFragment = patch({
-  //       title,
-  //       text,
-  //       url,
-  //     });
-
-  //     return connection.one<DatabasePost>(
-  //       sql`UPDATE posts SET ${updateFragment}
-  //           WHERE "id" = ${postId}
-  //           RETURNING *`
-  //     );
-  //   });
-  //   return queryResult;
-  // }
+    await this.pool.connect(async (connection) => {
+      return connection.query<DatabasePostVote>(
+        sql`DELETE FROM posts
+            WHERE id = ${postId}`
+      );
+    });
+  }
 
   async getPosts(userId: string): Promise<readonly DatabasePost[]> {
     return this.pool.connect(async (connection) => {
@@ -186,7 +182,7 @@ export class DatabaseService {
 
     return this.pool.connect(async (connection) => {
       return connection.maybeOne<DatabasePost>(
-        sql`SELECT posts.id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, 
+        sql`SELECT posts.id AS post_id, posts.title, posts.text, posts.url, posts.created_at, posts.updated_at, users.username, users.id AS user_id, 
             (SELECT count(*) AS comment_count FROM comments WHERE comments.post_id = ${id}), 
             (SELECT count(*) AS upvotes FROM user_post_votes WHERE user_post_votes.post_id = ${id} AND vote = True),
             (SELECT count(*) AS downvotes FROM user_post_votes WHERE user_post_votes.post_id = ${id} AND vote = False),

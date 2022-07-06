@@ -105,31 +105,19 @@ app.post('/post/create', authMiddleware, async (req: Request, res, next) => {
   }
 });
 
-// app.post('/post/delete', async (req, res, next) => {
-//   try {
-//     const { postId, userId } = req.body;
+app.delete('/posts/:postId', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const { postId } = req.params;
 
-//     const deletedPost = await postService.deletePost(postId, userId);
+    const deletedPost = await postService.deletePost({ postId });
 
-//     res.status(200).json({ deletedPost, status: 'Post successfully deleted.' });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    res.status(200).json(deletedPost);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// app.post('/post/edit', async (req, res, next) => {
-//   try {
-//     const { postId, title, text, url } = req.body;
-
-//     const editedPost = await postService.editPost(postId, { title, text, url });
-
-//     res.status(200).json({ editedPost, status: 'Post successfully edited.' });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-app.get('/post/:postId', authMiddleware, async (req, res, next) => {
+app.get('/posts/:postId', authMiddleware, async (req, res, next) => {
   try {
     const { postId: id } = req.params;
 
