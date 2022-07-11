@@ -118,6 +118,7 @@ export const UrlPostForm = (props: Props) => {
           _hover={{ bg: submitHoverBg, color: submitHoverFont }}
           _focus={{ boxShadow: 0 }}
           border={0}
+          _active={{ bg: submitHoverBg, color: submitHoverFont }}
         >
           Post
         </Button>

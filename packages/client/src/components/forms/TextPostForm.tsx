@@ -108,6 +108,7 @@ export const TextPostForm = (props: Props) => {
           color={submitFont}
           fontWeight="bold"
           _hover={{ bg: submitHoverBg, color: submitHoverFont }}
+          _active={{ bg: submitHoverBg, color: submitHoverFont }}
           _focus={{ boxShadow: 0 }}
           border={0}
         >
