@@ -48,14 +48,14 @@ export const CreatePostModal = () => {
         Create post
       </Button>
       <Modal
-        size={'2xl'}
+        size="2xl"
         closeOnOverlayClick={false}
         isOpen={isOpen}
         onClose={onClose}
         motionPreset="slideInRight"
         autoFocus={false}
       >
-        <ModalOverlay backdropFilter="auto" backdropBlur={'2px'} />
+        <ModalOverlay backdropFilter="auto" backdropBlur="2px" />
         <ModalContent mx={5} bg={modalBg}>
           <ModalHeader color={modalFont} fontWeight="extrabold">
             Create a post

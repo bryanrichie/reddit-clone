@@ -27,5 +27,5 @@ export const Timestamp = (props: Props) => {
     }
   };
 
-  return <Text fontSize={'xs'}> {totalAge()} ago</Text>;
+  return <Text fontSize="xs"> {totalAge()} ago</Text>;
 };

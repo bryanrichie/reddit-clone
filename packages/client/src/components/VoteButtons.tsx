@@ -73,25 +73,25 @@ export const VoteButtons = (props: Props) => {
     <VStack alignSelf="flex-start">
       <IconButton
         aria-label="Upvote"
-        variant={'outline'}
+        variant="outline"
         colorScheme={props.voteStatus === true ? upvoteButtonColorScheme : 'black'}
         border="none"
         _focus={{ boxShadow: '0' }}
         _hover={{ bg: voteButtonHoverBg }}
         _active={{ bg: 'none' }}
-        icon={<MdArrowCircleUp size={'40px'} />}
+        icon={<MdArrowCircleUp size="40px" />}
         onClick={() => onUpvote()}
       />
       <VoteCount upvotes={props.upvotes} downvotes={props.downvotes} />
       <IconButton
         aria-label="Downvote"
-        variant={'outline'}
+        variant="outline"
         colorScheme={props.voteStatus === false ? downvoteButtonColorScheme : 'black'}
         border="none"
         _focus={{ boxShadow: '0' }}
         _hover={{ bg: voteButtonHoverBg }}
         _active={{ bg: 'none' }}
-        icon={<MdArrowCircleDown size={'40px'} />}
+        icon={<MdArrowCircleDown size="40px" />}
         onClick={() => onDownvote()}
       />
     </VStack>

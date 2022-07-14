@@ -115,7 +115,7 @@ export const RegisterForm = () => {
           />
           <InputRightElement>
             <Button
-              color={'black'}
+              color="black"
               bg="gray.300"
               size="sm"
               mr={10}
@@ -135,7 +135,7 @@ export const RegisterForm = () => {
         <Input
           type="submit"
           value="Register"
-          fontSize={'lg'}
+          fontSize="lg"
           bg="blue.700"
           color="blue.100"
           fontWeight="bold"

@@ -13,6 +13,7 @@ export const Comments = () => {
   const comments = _.map(data, (comment) => {
     return (
       <Comment
+        key={comment.id}
         id={comment.id}
         username={comment.username}
         comment={comment.comment}
@@ -22,15 +23,15 @@ export const Comments = () => {
   });
 
   const noComments = (
-    <VStack w="100%" spacing={0} h="500px" justifyContent={'center'}>
-      <VscCommentDiscussion size={'50px'} />
+    <VStack w="100%" spacing={0} h="500px" justifyContent="center">
+      <VscCommentDiscussion size="50px" />
       <Text>No comments yet</Text>
       <Text>Be the first to leave one</Text>
     </VStack>
   );
 
   if (isLoading) {
-    return <Spinner size="xl" alignSelf={'center'} />;
+    return <Spinner size="xl" alignSelf="center" />;
   }
 
   return (

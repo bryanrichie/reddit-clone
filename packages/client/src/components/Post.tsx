@@ -43,7 +43,7 @@ export const Post = (props: Props) => {
         </AspectRatio>
       );
     }
-    return <Image alignSelf={'center'} maxH={'300px'} objectFit={'cover'} src={post.url ?? ''} />;
+    return <Image alignSelf="center" maxH="300px" objectFit="cover" src={post.url ?? ''} />;
   };
 
   const content = post.text && !post.url ? <Text pb={2}>{post.text}</Text> : urlCheck();
@@ -66,22 +66,22 @@ export const Post = (props: Props) => {
           upvotes={post.upvotes}
           downvotes={post.downvotes}
         />
-        <VStack align={'left'} w={'100%'} spacing={0}>
+        <VStack align="left" w="100%" spacing={0}>
           <HStack>
-            <Text fontSize={'xs'}>
+            <Text fontSize="xs">
               Posted by <b>{post.username}</b>
             </Text>
             <Timestamp createdAt={post.created_at} />
           </HStack>
-          <Text fontWeight={'extrabold'} fontSize={'2xl'}>
+          <Text fontWeight="extrabold" fontSize="2xl">
             {_.upperFirst(post.title)}
           </Text>
           {!isTitleOnlyPost ? content : null}
         </VStack>
       </HStack>
       <HStack fontWeight="bold" w="100%" mt={2} justify="space-between">
-        <HStack pl={'50px'} color={commentFont}>
-          <MdOutlineModeComment size={'20px'} />
+        <HStack pl="50px" color={commentFont}>
+          <MdOutlineModeComment size="20px" />
           <CommentCount commentCount={post.comment_count} />
         </HStack>
         {post.user_id === profileDetails.id ? <PostDelete postId={postId} /> : ''}

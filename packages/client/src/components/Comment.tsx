@@ -27,26 +27,28 @@ export const Comment = (props: Props) => {
   const replyHover = useColorModeValue('gray.200', 'gray.500');
 
   return (
-    <ListItem key={id} listStyleType={'none'} p={2}>
-      <VStack align={'flex-start'} spacing={0} mb={2}>
-        <HStack align={'baseline'}>
-          <Text fontWeight={'bold'} fontSize="lg">
+    <ListItem listStyleType="none" p={2}>
+      <VStack align="flex-start" spacing={0} mb={2}>
+        <HStack align="baseline">
+          <Text fontWeight="bold" fontSize="lg">
             {username}
           </Text>
           <Timestamp createdAt={createdAt} />
         </HStack>
-        <Text fontSize={'sm'}>{comment}</Text>
+        <Text fontSize="sm">{comment}</Text>
       </VStack>
       <HStack
         spacing={0.5}
-        _hover={{ bg: replyHover, borderRadius: 5 }}
+        _hover={{ bg: replyHover, rounded: 5 }}
         w="60px"
         p={1}
         mb={2}
         onClick={onToggle}
       >
-        <MdOutlineModeComment size={'15px'} />
-        <Text fontSize={'xs'}>Reply</Text>
+        <MdOutlineModeComment size="15px" />
+        <Text fontSize="xs" cursor="default">
+          Reply
+        </Text>
       </HStack>
       <Collapse in={isOpen}>
         <ReplyForm parentId={id} />

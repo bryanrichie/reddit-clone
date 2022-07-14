@@ -91,7 +91,7 @@ export const LoginForm = () => {
           />
           <InputRightElement>
             <Button
-              color={'black'}
+              color="black"
               bg="gray.300"
               size="sm"
               mr={10}
@@ -111,7 +111,7 @@ export const LoginForm = () => {
         <Input
           type="submit"
           value="Login"
-          fontSize={'lg'}
+          fontSize="lg"
           bg="blue.700"
           color="blue.100"
           fontWeight="bold"

@@ -17,6 +17,7 @@ export const Replies = (props: Props) => {
   const replies = _.map(data, (reply) => {
     return (
       <Reply
+        key={reply.id}
         id={reply.id}
         username={reply.username}
         comment={reply.comment}

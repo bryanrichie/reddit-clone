@@ -48,16 +48,16 @@ export const PostsList = () => {
           </AspectRatio>
         );
       }
-      return <Image alignSelf={'center'} maxH={'300px'} objectFit={'cover'} src={post.url ?? ''} />;
+      return <Image alignSelf="center" maxH="300px" objectFit="cover" src={post.url ?? ''} />;
     };
 
     const content =
       post.text && !post.url ? (
         <Text
           pb={2}
-          maxH={'300px'}
+          maxH="300px"
           overflow="hidden"
-          position={'relative'}
+          position="relative"
           _before={{
             content: `''`,
             w: `100%`,
@@ -75,14 +75,7 @@ export const PostsList = () => {
       );
 
     return (
-      <ListItem
-        key={post.id}
-        listStyleType={'none'}
-        borderRadius="md"
-        bg={postBg}
-        p={2}
-        minH="120px"
-      >
+      <ListItem key={post.id} listStyleType="none" borderRadius="md" bg={postBg} p={2} minH="120px">
         <HStack spacing={2} align="flex-start" h="100%" pr={2}>
           <VoteButtons
             postId={post.id}
@@ -105,13 +98,13 @@ export const PostsList = () => {
                 </Text>
                 <Timestamp createdAt={post.created_at} />
               </HStack>
-              <Text fontWeight={'extrabold'} fontSize={'2xl'}>
+              <Text fontWeight="extrabold" fontSize="2xl">
                 {_.upperFirst(post.title)}
               </Text>
               {!isTitleOnlyPost ? content : null}
             </VStack>
             <HStack fontWeight="bold" mt={2}>
-              <MdOutlineModeComment color="#718096" size={'20px'} />
+              <MdOutlineModeComment color="#718096" size="20px" />
               <CommentCount commentCount={post.comment_count} />
             </HStack>
           </Link>
@@ -121,12 +114,12 @@ export const PostsList = () => {
   });
 
   if (isLoading) {
-    return <Spinner size="xl" alignSelf={'center'} />;
+    return <Spinner size="xl" alignSelf="center" />;
   }
 
   return (
     <UnorderedList
-      alignSelf={'center'}
+      alignSelf="center"
       spacing={3}
       w={[null, '100%', '90%', '80%', '70%', '60%']}
       mx="auto"

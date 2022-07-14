@@ -1,4 +1,4 @@
-import { Button, Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Button, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -74,7 +74,7 @@ export const ReplyForm = (props: Props) => {
           placeholder="What do you think?"
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputFocusBorder}
-          bg={'white'}
+          bg="white"
           color="black"
           alignSelf="flex-start"
           borderWidth="1px"
@@ -84,7 +84,7 @@ export const ReplyForm = (props: Props) => {
 
         <Button
           type="submit"
-          fontSize={'sm'}
+          fontSize="sm"
           w={100}
           alignSelf="flex-end"
           borderRadius={50}

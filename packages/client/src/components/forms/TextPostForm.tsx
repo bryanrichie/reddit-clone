@@ -78,7 +78,7 @@ export const TextPostForm = (props: Props) => {
           placeholder="Title"
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputFocusBorder}
-          bg={'white'}
+          bg="white"
           color="black"
           borderWidth="1px"
           borderColor="black"
@@ -90,7 +90,7 @@ export const TextPostForm = (props: Props) => {
           placeholder="Text (optional)"
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputFocusBorder}
-          bg={'white'}
+          bg="white"
           h={250}
           color="black"
           borderWidth="1px"
@@ -99,7 +99,7 @@ export const TextPostForm = (props: Props) => {
         />
         <Button
           type="submit"
-          alignSelf={'flex-end'}
+          alignSelf="flex-end"
           w={100}
           mt={-5}
           mr={4}
