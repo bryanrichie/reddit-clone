@@ -132,32 +132,6 @@ app.get('/posts/:postId', authMiddleware, async (req, res, next) => {
   }
 });
 
-app.post('/posts/:postId/comments/add', authMiddleware, async (req: Request, res, next) => {
-  try {
-    const comment = await postService.addComment({
-      userId: req.user.id,
-      postId: req.body.postId,
-      comment: req.body.comment,
-    });
-
-    res.status(200).json({ comment });
-  } catch (error) {
-    next(error);
-  }
-});
-
-app.get('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
-  try {
-    const { postId } = req.params;
-
-    const comments = await postService.getComments(postId);
-
-    res.status(200).json(comments);
-  } catch (error) {
-    next(error);
-  }
-});
-
 app.post('/posts/:postId/votes/add', authMiddleware, async (req: Request, res, next) => {
   try {
     const vote = await postService.addPostVote({
@@ -194,6 +168,59 @@ app.post('/posts/:postId/votes/delete', authMiddleware, async (req: Request, res
     });
 
     res.status(200).json({ vote });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/posts/:postId/comments/add', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const comment = await postService.addComment({
+      userId: req.user.id,
+      postId: req.body.postId,
+      comment: req.body.comment,
+    });
+
+    res.status(200).json({ comment });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const { postId } = req.params;
+
+    const comments = await postService.getComments(postId);
+
+    res.status(200).json(comments);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/comments/:parentId/replies/add', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const reply = await postService.addReply({
+      userId: req.user.id,
+      postId: req.body.postId,
+      parentId: req.body.parentId,
+      reply: req.body.reply,
+    });
+
+    res.status(200).json({ reply });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/comments/:parentId/replies', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const { parentId } = req.params;
+
+    const replies = await postService.getReplies(parentId);
+
+    res.status(200).json(replies);
   } catch (error) {
     next(error);
   }

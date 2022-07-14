@@ -8,7 +8,6 @@ CREATE TABLE "users" (
   "password_hash" VARCHAR(30) NOT NULL,
   "email" VARCHAR NOT NULL UNIQUE,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   PRIMARY KEY ("id")
 );
 
@@ -22,8 +21,6 @@ CREATE INDEX ON "users" (email);
 
 CREATE INDEX ON "users" (created_at);
 
-CREATE INDEX ON "users" (updated_at);
-
 CREATE TABLE "posts" (
   "id" uuid NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
   "user_id" uuid NOT NULL,
@@ -31,7 +28,6 @@ CREATE TABLE "posts" (
   "text" varchar(40000),
   "url" text,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   PRIMARY KEY ("id"),
   FOREIGN KEY ("user_id") REFERENCES users("id")
 );
@@ -48,15 +44,13 @@ CREATE INDEX ON "posts" (url);
 
 CREATE INDEX ON "posts" (created_at);
 
-CREATE INDEX ON "posts" (updated_at);
-
 CREATE TABLE "comments" (
   "id" uuid NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
   "user_id" uuid NOT NULL,
   "post_id" uuid NOT NULL,
+  "parent_id" uuid,
   "comment" VARCHAR(10000),
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   PRIMARY KEY ("id"),
   FOREIGN KEY ("user_id") REFERENCES users("id"),
   FOREIGN KEY ("post_id") REFERENCES posts("id") ON DELETE CASCADE
@@ -68,11 +62,11 @@ CREATE INDEX ON "comments" (user_id);
 
 CREATE INDEX ON "comments" (post_id);
 
+CREATE INDEX ON "comments" (parent_id);
+
 CREATE INDEX ON "comments" (comment);
 
 CREATE INDEX ON "comments" (created_at);
-
-CREATE INDEX ON "comments" (updated_at);
 
 CREATE TABLE "user_post_votes" (
   "id" uuid NOT NULL DEFAULT uuid_generate_v4(),

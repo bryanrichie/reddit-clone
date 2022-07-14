@@ -1,6 +1,6 @@
-import React from 'react';
-import _ from 'lodash';
 import { Text } from '@chakra-ui/react';
+import _ from 'lodash';
+import React from 'react';
 
 interface Props {
   createdAt: string;
@@ -8,14 +8,14 @@ interface Props {
 
 export const Timestamp = (props: Props) => {
   const timeNow = Date.now();
-  const postTime = _.toInteger(props.createdAt);
-  const age = Math.abs(timeNow - postTime) / 1000;
+  const createdAt = _.toInteger(props.createdAt);
+  const age = Math.abs(timeNow - createdAt) / 1000;
   const days = Math.floor(age / 86000);
   const hours = Math.floor(age / 3600) % 24;
   const minutes = Math.floor(age / 60) % 60;
   const seconds = Math.floor(age % 60);
 
-  const postAge = () => {
+  const totalAge = () => {
     if (days <= 0 && hours <= 0 && minutes <= 0) {
       return `${seconds} seconds`;
     } else if (days <= 0 && hours <= 0) {
@@ -27,5 +27,5 @@ export const Timestamp = (props: Props) => {
     }
   };
 
-  return <Text fontSize={'xs'}> {postAge()} ago</Text>;
+  return <Text fontSize={'xs'}> {totalAge()} ago</Text>;
 };

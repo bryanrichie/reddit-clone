@@ -5,7 +5,6 @@ export interface Post {
   text: string | null;
   url: string | null;
   created_at: string;
-  updated_at: string;
   username: string;
   comment_count: string;
   upvotes: string;
@@ -17,9 +16,9 @@ export interface Comment {
   id: string;
   postId: string;
   userId: string;
+  parentId: string | null;
   comment: string;
   created_at: string;
-  updated_at: string;
   username: string;
 }
 

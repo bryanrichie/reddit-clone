@@ -1,6 +1,6 @@
-import React from 'react';
-import _ from 'lodash';
 import { Text } from '@chakra-ui/react';
+import _ from 'lodash';
+import React from 'react';
 
 interface Props {
   upvotes: string;

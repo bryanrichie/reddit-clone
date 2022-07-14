@@ -2,6 +2,7 @@ import { Post } from '../types';
 import {
   AddCommentDto,
   AddPostVoteDto,
+  AddReplyDto,
   CreateDatabasePostDto,
   DatabaseComment,
   DatabasePost,
@@ -40,6 +41,14 @@ export class PostService {
 
   getComments(postId: string): Promise<readonly DatabaseComment[]> {
     return this.databaseService.getComments(postId);
+  }
+
+  addReply(reply: AddReplyDto): Promise<void> {
+    return this.databaseService.addReply(reply);
+  }
+
+  getReplies(parentId: string): Promise<readonly DatabaseComment[]> {
+    return this.databaseService.getReplies(parentId);
   }
 
   addPostVote(postVote: AddPostVoteDto): Promise<void> {
