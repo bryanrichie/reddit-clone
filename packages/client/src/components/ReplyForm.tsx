@@ -1,32 +1,30 @@
-import { Button, Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Button, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import _ from 'lodash';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { useAuth } from '../../hooks/useAuth';
-import { useCreateTextPost } from '../../hooks/useCreatePost';
+import { useAddReply } from '../hooks/useAddReply';
+import { useAuth } from '../hooks/useAuth';
+import { useRequiredParams } from '../utils/useRequiredParams';
 
 interface Props {
-  onClose: () => void;
+  parentId: string;
 }
 
 interface FormValues {
-  title: string;
-  text?: string;
+  reply: string;
 }
 
 const validationSchema = yup
   .object({
-    title: yup.string().max(300).required(),
-    text: yup.string().max(40000).optional(),
+    reply: yup.string().max(10000).required(),
   })
   .required();
 
-export const TextPostForm = (props: Props) => {
-  const { onClose } = props;
-  const createPostMutation = useCreateTextPost();
+export const ReplyForm = (props: Props) => {
+  const { parentId } = props;
+  const { postId } = useRequiredParams<{ postId: string }>();
+  const addReplyMutation = useAddReply(parentId);
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { authToken } = useAuth();
   const toast = useToast();
@@ -41,78 +39,65 @@ export const TextPostForm = (props: Props) => {
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors },
   } = useForm<FormValues>(formOptions);
-
-  const navigate = useNavigate();
 
   const onSubmit = React.useCallback(
     (data: FormValues) => {
       if (authToken) {
         const request = {
-          title: data.title,
-          text: !_.isEmpty(data.text) ? data.text : null,
+          postId: postId,
+          parentId: parentId,
+          reply: data.reply,
         };
-        return createPostMutation.mutateAsync({ ...request, token: authToken }).then((res: any) => {
-          onClose();
+        return addReplyMutation.mutateAsync({ ...request, token: authToken }).then((res) => {
           toast({
             position: 'top',
-            title: 'Post successfully created!',
+            title: 'Reply added!',
             status: 'success',
             duration: 5000,
           });
-          navigate(`/post/${res.id}`, { replace: true });
+          resetField('reply');
         });
       }
     },
-    [createPostMutation]
+    [addReplyMutation]
   );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack>
-        <Input
-          {...register('title')}
-          id="title"
-          type="text"
-          placeholder="Title"
-          _placeholder={{ color: 'gray' }}
-          focusBorderColor={inputFocusBorder}
-          bg="white"
-          color="black"
-          borderWidth="1px"
-          borderColor="black"
-          _hover={{ borderWidth: '2px', borderColor: inputHoverBorder }}
-        />
+      <VStack spacing={2}>
         <Textarea
-          {...register('text')}
-          id="text"
-          placeholder="Text (optional)"
+          {...register('reply')}
+          id="reply"
+          placeholder="What do you think?"
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputFocusBorder}
           bg="white"
-          h={250}
           color="black"
+          alignSelf="flex-start"
           borderWidth="1px"
           borderColor="black"
           _hover={{ borderWidth: '2px', borderColor: inputHoverBorder }}
         />
+
         <Button
           type="submit"
-          alignSelf="flex-end"
+          fontSize="sm"
           w={100}
-          mt={-5}
-          mr={4}
+          alignSelf="flex-end"
           borderRadius={50}
+          borderWidth={2}
+          borderColor={submitFont}
           bg={submitBg}
           color={submitFont}
           fontWeight="bold"
           _hover={{ bg: submitHoverBg, color: submitHoverFont }}
           _active={{ bg: submitHoverBg, color: submitHoverFont }}
-          _focus={{ boxShadow: 0 }}
-          border={0}
+          _focus={{ boxShadow: '0' }}
         >
-          Post
+          Reply
         </Button>
       </VStack>
     </form>

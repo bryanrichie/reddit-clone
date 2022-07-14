@@ -7,7 +7,7 @@ export const HomePage = () => {
   const bodyBg = useColorModeValue('gray.300', 'blue.900');
 
   return (
-    <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
+    <Flex bg={bodyBg} minH="100vh" flexDir="column" pb={5}>
       <NavBar />
       <PostsList />
     </Flex>

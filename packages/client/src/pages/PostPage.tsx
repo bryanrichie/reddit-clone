@@ -16,7 +16,7 @@ export const PostPage = () => {
 
   const checkLoading = () => {
     if (isLoading) {
-      return <Spinner size="xl" alignSelf={'center'} />;
+      return <Spinner size="xl" alignSelf="center" />;
     }
 
     if (!post || error) {
@@ -43,7 +43,7 @@ export const PostPage = () => {
   };
 
   return (
-    <Flex bg={bodyBg} minH={'100vh'} flexDir="column" pb={5}>
+    <Flex bg={bodyBg} minH="100vh" flexDir="column" pb={5}>
       <NavBar />
       {checkLoading()}
     </Flex>

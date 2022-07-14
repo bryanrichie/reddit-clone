@@ -1,4 +1,4 @@
-import { Button, HStack, useColorModeValue } from '@chakra-ui/react';
+import { Button, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'react-use';
@@ -32,7 +32,7 @@ export const PostDelete = (props: Props) => {
   return (
     <Button
       bg="none"
-      pr={'50px'}
+      pr="50px"
       color={deleteFont}
       _hover={{ textDecoration: 'underline' }}
       _active={{ textDecoration: 'underline' }}

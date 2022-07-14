@@ -7,7 +7,6 @@ import {
   Link,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Text,
@@ -33,8 +32,8 @@ export const NavBar = () => {
   const menuDivider = useColorModeValue('blue.800', 'white');
 
   return (
-    <Flex w={'100%'} flexDir="column" mb={5}>
-      <HStack h={70} justifyContent={'space-between'} px="20px" bg={navBg}>
+    <Flex w="100%" flexDir="column" mb={5}>
+      <HStack h={70} justifyContent="space-between" px="20px" bg={navBg}>
         <Link
           as={ReactRouterLink}
           to="/"
@@ -67,11 +66,11 @@ export const NavBar = () => {
                   fontWeight="bold"
                   py={3}
                 >
-                  <MdAccountCircle size={'25px'} /> <Text ml="10px">Profile</Text>
+                  <MdAccountCircle size="25px" /> <Text ml="10px">Profile</Text>
                 </MenuItem>
               </Link>
               <MenuItem _hover={{ bg: navButtonBg, color: navButtonFont }} fontWeight="bold" py={3}>
-                <MdLogout size={'25px'} />
+                <MdLogout size="25px" />
                 <Logout />
               </MenuItem>
             </MenuList>
@@ -85,9 +84,9 @@ export const NavBar = () => {
             _focus={{ boxShadow: '0' }}
             icon={
               colorMode === 'light' ? (
-                <MdOutlineDarkMode size={'30px'} />
+                <MdOutlineDarkMode size="30px" />
               ) : (
-                <MdOutlineLightMode size={'30px'} />
+                <MdOutlineLightMode size="30px" />
               )
             }
             isRound={true}

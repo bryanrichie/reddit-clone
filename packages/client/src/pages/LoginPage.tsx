@@ -9,10 +9,10 @@ export const LoginPage = () => {
       <Box bg="blue.800" w="500px" p={3} boxShadow="lg" borderRadius="lg">
         <Tabs variant="soft-rounded" isFitted>
           <TabList mx={4}>
-            <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
+            <Tab fontWeight="bold" color="blue.100" _focus={{ boxShadow: 0 }}>
               Login
             </Tab>
-            <Tab fontWeight={'bold'} color="blue.100" _focus={{ boxShadow: 0 }}>
+            <Tab fontWeight="bold" color="blue.100" _focus={{ boxShadow: 0 }}>
               Register
             </Tab>
           </TabList>

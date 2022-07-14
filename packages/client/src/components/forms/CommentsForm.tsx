@@ -1,4 +1,4 @@
-import { Button, Input, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Button, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -69,7 +69,7 @@ export const CommentsForm = () => {
           _placeholder={{ color: 'gray' }}
           focusBorderColor={inputFocusBorder}
           borderRadius="0"
-          bg={'white'}
+          bg="white"
           color="black"
           h={150}
           w={[300, 500, 650, 750, 900]}
@@ -80,7 +80,7 @@ export const CommentsForm = () => {
 
         <Button
           type="submit"
-          fontSize={'sm'}
+          fontSize="sm"
           w={100}
           alignSelf="flex-end"
           borderRadius={50}
