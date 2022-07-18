@@ -20,6 +20,9 @@ export interface Comment {
   comment: string;
   created_at: string;
   username: string;
+  upvotes: string;
+  downvotes: string;
+  vote_status: boolean | null;
 }
 
 export interface JwtToken {

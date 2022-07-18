@@ -190,8 +190,9 @@ app.post('/posts/:postId/comments/add', authMiddleware, async (req: Request, res
 app.get('/posts/:postId/comments', authMiddleware, async (req: Request, res, next) => {
   try {
     const { postId } = req.params;
+    const userId = req.user.id;
 
-    const comments = await postService.getComments(postId);
+    const comments = await postService.getComments(postId, userId);
 
     res.status(200).json(comments);
   } catch (error) {
@@ -217,10 +218,52 @@ app.post('/comments/:parentId/replies/add', authMiddleware, async (req: Request,
 app.get('/comments/:parentId/replies', authMiddleware, async (req: Request, res, next) => {
   try {
     const { parentId } = req.params;
+    const userId = req.user.id;
 
-    const replies = await postService.getReplies(parentId);
+    const replies = await postService.getReplies(parentId, userId);
 
     res.status(200).json(replies);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/comments/:parentId/vote/add', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const vote = await postService.addCommentVote({
+      userId: req.user.id,
+      commentId: req.body.commentId,
+      vote: req.body.vote,
+    });
+
+    res.status(200).json({ vote });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/comments/:parentId/vote/update', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const vote = await postService.updateCommentVote({
+      userId: req.user.id,
+      commentId: req.body.commentId,
+      vote: req.body.vote,
+    });
+
+    res.status(200).json({ vote });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/comments/:parentId/vote/delete', authMiddleware, async (req: Request, res, next) => {
+  try {
+    const vote = await postService.deleteCommentVote({
+      userId: req.user.id,
+      commentId: req.body.commentId,
+    });
+
+    res.status(200).json({ vote });
   } catch (error) {
     next(error);
   }

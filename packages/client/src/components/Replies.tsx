@@ -17,11 +17,16 @@ export const Replies = (props: Props) => {
   const replies = _.map(data, (reply) => {
     return (
       <Reply
+        postId={reply.postId}
         key={reply.id}
         id={reply.id}
+        parentId={parentId}
         username={reply.username}
         comment={reply.comment}
         createdAt={reply.created_at}
+        voteStatus={reply.vote_status}
+        upvotes={reply.upvotes}
+        downvotes={reply.downvotes}
       />
     );
   });

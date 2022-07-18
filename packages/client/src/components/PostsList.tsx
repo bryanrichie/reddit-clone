@@ -16,7 +16,7 @@ import { MdOutlineModeComment } from 'react-icons/md';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { CommentCount } from '../components/CommentCount';
 import { Timestamp } from '../components/Timestamp';
-import { VoteButtons } from '../components/VoteButtons';
+import { PostVoteButtons } from './PostVoteButtons';
 import { useGetPosts } from '../hooks/useGetPosts';
 
 export const PostsList = () => {
@@ -77,7 +77,7 @@ export const PostsList = () => {
     return (
       <ListItem key={post.id} listStyleType="none" borderRadius="md" bg={postBg} p={2} minH="120px">
         <HStack spacing={2} align="flex-start" h="100%" pr={2}>
-          <VoteButtons
+          <PostVoteButtons
             postId={post.id}
             voteStatus={post.vote_status}
             upvotes={post.upvotes}

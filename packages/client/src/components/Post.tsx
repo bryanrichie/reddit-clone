@@ -9,7 +9,7 @@ import { JwtToken } from '../types';
 import { CommentCount } from './CommentCount';
 import { PostDelete } from './PostDelete';
 import { Timestamp } from './Timestamp';
-import { VoteButtons } from './VoteButtons';
+import { PostVoteButtons } from './PostVoteButtons';
 
 interface Props {
   postId: string;
@@ -60,7 +60,7 @@ export const Post = (props: Props) => {
       align="flex-start"
     >
       <HStack spacing={2} align="flex-start" w="100%" pr={2}>
-        <VoteButtons
+        <PostVoteButtons
           postId={postId}
           voteStatus={post.vote_status}
           upvotes={post.upvotes}
