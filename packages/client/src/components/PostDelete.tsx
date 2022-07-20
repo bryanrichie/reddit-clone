@@ -19,11 +19,7 @@ export const PostDelete = (props: Props) => {
 
   const onDelete = React.useCallback(() => {
     if (token) {
-      const request = {
-        postId: postId,
-      };
-
-      return deletePostMutation.mutateAsync({ ...request, token }).then((res: any) => {
+      return deletePostMutation.mutateAsync({ postId: postId, token }).then((res: any) => {
         navigate(`/`, { replace: true });
       });
     }

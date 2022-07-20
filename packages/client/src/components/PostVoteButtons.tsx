@@ -22,50 +22,26 @@ export const PostVoteButtons = (props: Props) => {
   const downvoteButtonColorScheme = useColorModeValue('red', 'red');
 
   const onUpvote = React.useCallback(() => {
-    if (authToken && props.voteStatus == null) {
-      const request = {
-        postId: props.postId,
-        vote: true,
-      };
-
-      return addVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
-    } else if (authToken && props.voteStatus == false) {
-      const request = {
-        postId: props.postId,
-        vote: true,
-      };
-
-      return updateVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
-    } else if (authToken && props.voteStatus == true) {
-      const request = {
-        postId: props.postId,
-      };
-
-      return deleteVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
+    if (authToken && props.voteStatus === null) {
+      return addVoteMutation.mutateAsync({ postId: props.postId, vote: true, token: authToken });
+    } else if (authToken && props.voteStatus === false) {
+      return updateVoteMutation.mutateAsync({ postId: props.postId, vote: true, token: authToken });
+    } else if (authToken && props.voteStatus === true) {
+      return deleteVoteMutation.mutateAsync({ postId: props.postId, token: authToken });
     }
   }, [addVoteMutation, updateVoteMutation, deleteVoteMutation]);
 
   const onDownvote = React.useCallback(() => {
-    if (authToken && props.voteStatus == null) {
-      const request = {
+    if (authToken && props.voteStatus === null) {
+      return addVoteMutation.mutateAsync({ postId: props.postId, vote: false, token: authToken });
+    } else if (authToken && props.voteStatus === true) {
+      return updateVoteMutation.mutateAsync({
         postId: props.postId,
         vote: false,
-      };
-
-      return addVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
-    } else if (authToken && props.voteStatus == true) {
-      const request = {
-        postId: props.postId,
-        vote: false,
-      };
-
-      return updateVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
-    } else if (authToken && props.voteStatus == false) {
-      const request = {
-        postId: props.postId,
-      };
-
-      return deleteVoteMutation.mutateAsync({ ...request, token: authToken }).then((res) => {});
+        token: authToken,
+      });
+    } else if (authToken && props.voteStatus === false) {
+      return deleteVoteMutation.mutateAsync({ postId: props.postId, token: authToken });
     }
   }, [addVoteMutation, updateVoteMutation, deleteVoteMutation]);
 
