@@ -54,7 +54,7 @@ export const PostsList = () => {
     const content =
       post.text && !post.url ? (
         <Text
-          pb={2}
+          py={2}
           maxH="300px"
           overflow="hidden"
           position="relative"
@@ -98,7 +98,7 @@ export const PostsList = () => {
                 </Text>
                 <Timestamp createdAt={post.created_at} />
               </HStack>
-              <Text fontWeight="extrabold" fontSize="2xl">
+              <Text fontWeight="extrabold" fontSize="2xl" lineHeight={7}>
                 {_.upperFirst(post.title)}
               </Text>
               {!isTitleOnlyPost ? content : null}
