@@ -11,7 +11,7 @@ export const CommentCount = (props: Props) => {
 
   if (_.toInteger(props.commentCount) < 1) {
     return <Text color={commentFont}>Comment</Text>;
-  } else if (_.toInteger(props.commentCount) == 1) {
+  } else if (_.toInteger(props.commentCount) === 1) {
     return <Text color={commentFont}>{props.commentCount} Comment</Text>;
   }
   return <Text color={commentFont}>{props.commentCount} Comments</Text>;

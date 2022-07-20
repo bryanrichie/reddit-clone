@@ -67,7 +67,7 @@ export const ReplyForm = (props: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack spacing={2}>
+      <VStack spacing={2} mt={2}>
         <Textarea
           {...register('reply')}
           id="reply"

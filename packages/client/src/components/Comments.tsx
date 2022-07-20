@@ -13,11 +13,15 @@ export const Comments = () => {
   const comments = _.map(data, (comment) => {
     return (
       <Comment
+        postId={postId}
         key={comment.id}
         id={comment.id}
         username={comment.username}
         comment={comment.comment}
         createdAt={comment.created_at}
+        voteStatus={comment.vote_status}
+        upvotes={comment.upvotes}
+        downvotes={comment.downvotes}
       />
     );
   });
