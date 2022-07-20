@@ -46,7 +46,7 @@ export const Post = (props: Props) => {
     return <Image alignSelf="center" maxH="300px" objectFit="cover" src={post.url ?? ''} />;
   };
 
-  const content = post.text && !post.url ? <Text pb={2}>{post.text}</Text> : urlCheck();
+  const content = post.text && !post.url ? <Text py={2}>{post.text}</Text> : urlCheck();
 
   return (
     <VStack
@@ -73,7 +73,7 @@ export const Post = (props: Props) => {
             </Text>
             <Timestamp createdAt={post.created_at} />
           </HStack>
-          <Text fontWeight="extrabold" fontSize="2xl">
+          <Text fontWeight="extrabold" fontSize="2xl" lineHeight={7}>
             {_.upperFirst(post.title)}
           </Text>
           {!isTitleOnlyPost ? content : null}

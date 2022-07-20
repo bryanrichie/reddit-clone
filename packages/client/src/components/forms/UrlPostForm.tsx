@@ -48,7 +48,9 @@ export const UrlPostForm = (props: Props) => {
 
   const onSubmit = (data: FormValues) => {
     const youtubeCheck = _.some(['youtube', 'youtu.be'], (s) => _.includes(data.url, s));
-    const imgUrlExtension = data.url.slice(
+    const url = new URL(data.url);
+    const cleanedImgUrl = `${url.origin}${url.pathname}`;
+    const imgUrlExtension = cleanedImgUrl.slice(
       (Math.max(0, data.url.lastIndexOf('.')) || Infinity) + 1
     );
     const validUrlExtensions = ['jpeg', 'jpg', 'png', 'gif', 'gifv', 'apng', 'avif', 'svg', 'webp'];
@@ -63,7 +65,21 @@ export const UrlPostForm = (props: Props) => {
         duration: 5000,
       });
     }
-    if (authToken) {
+    if (authToken && urlValidation) {
+      return createPostMutation
+        .mutateAsync({ title: data.title, url: cleanedImgUrl, token: authToken })
+        .then((res: any) => {
+          onClose();
+          toast({
+            position: 'top',
+            title: 'Post successfully created!',
+            status: 'success',
+            duration: 5000,
+          });
+          navigate(`/post/${res.id}`, { replace: true });
+        });
+    }
+    if (authToken && youtubeCheck) {
       return createPostMutation.mutateAsync({ ...data, token: authToken }).then((res: any) => {
         onClose();
         toast({
